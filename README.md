@@ -7,7 +7,14 @@ My submission for the **Voice Arena take-home, Question 1**: design how a public
 | Main document | [`report/Anmol_Adwani_Q1_Main.pdf`](report/Anmol_Adwani_Q1_Main.pdf) |
 | One-page report | [`report/Anmol_Adwani_Q1_OnePager.pdf`](report/Anmol_Adwani_Q1_OnePager.pdf) |
 | Leaderboard sketch | [`report/Anmol_Adwani_Q1_Leaderboard_Sketch.png`](report/Anmol_Adwani_Q1_Leaderboard_Sketch.png) |
+| Video walkthrough (1:55) | [`video/walkthrough.mp4`](video/walkthrough.mp4) · captions in [`video/walkthrough.srt`](video/walkthrough.srt) |
 | Pilot code + results | this repo (`run_systems.py`, `score.py`, `results/`) |
+
+### ▶ Video walkthrough
+
+[![Watch the 2-minute walkthrough](docs/img/video_thumb.png)](video/walkthrough.mp4)
+
+*What I designed, the three choices that matter most and why, and what I learned from the benchmarks. Click to play.*
 
 ---
 
