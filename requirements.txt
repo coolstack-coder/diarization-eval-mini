@@ -1,0 +1,8 @@
+sherpa-onnx==2.0.3
+pyannote.metrics==4.2.0
+soundfile
+numpy
+scipy
+pandas
+matplotlib
+pyarrow

@@ -1,60 +1,116 @@
-# diarization-eval-mini
+# Speaker Diarization Leaderboard: Eval Design + Pilot
 
-This is the small pilot for my Voice Arena take-home (Q1: design a speaker diarization eval). I wanted to check my scoring choices on real audio instead of only arguing for them, so this repo runs three open diarization pipelines on three public AMI meetings and scores them several ways.
+My submission for the **Voice Arena take-home, Question 1**: design how a public leaderboard should evaluate speaker diarization systems ("who spoke when"). I didn't want to only argue for my choices, so I also ran a small version of the eval on real AMI meetings to test them.
 
-## What's here
-
-| File | What it does |
+| Deliverable | File |
 |---|---|
-| `prepare_data.py` | Pulls audio and word-aligned references for the AMI test meetings from the HF mirror `diarizers-community/ami`, both the `ihm` (headset mix) and `sdm` (single far-field mic) subsets. The official AMI mirror was returning 503 when I tried it. |
-| `run_systems.py` | Runs each system on the first 10 minutes of each file in two modes: blind (default threshold) and with the speaker count (4) given. `TUNED_ONLY=1` runs blind mode with the dev-tuned thresholds instead. Writes RTTMs to `runs/`. |
-| `calibrate_threshold.py` | Sweeps the clustering threshold for each embedding model (WeSpeaker, TitaNet) on a held-out meeting (ES2004c, not in the test files). |
-| `score.py` | pyannote.metrics DER/JER under three settings: strict, 0.25 s collar, and collar plus skip-overlap. |
-| `analyze.py` | Summary tables, plus a paired bootstrap at both the 1-minute-chunk level and the recording level. |
-| `plots.py` | Figures for the report. |
+| Main document | [`report/Anmol_Adwani_Q1_Main.pdf`](report/Anmol_Adwani_Q1_Main.pdf) |
+| One-page report | [`report/Anmol_Adwani_Q1_OnePager.pdf`](report/Anmol_Adwani_Q1_OnePager.pdf) |
+| Leaderboard sketch | [`report/Anmol_Adwani_Q1_Leaderboard_Sketch.png`](report/Anmol_Adwani_Q1_Leaderboard_Sketch.png) |
+| Pilot code + results | this repo (`run_systems.py`, `score.py`, `results/`) |
 
-## Systems
+---
 
-All three are built with sherpa-onnx 2.0.3 on CPU (Apple M-series, 4 threads), with clustering threshold 0.5, `min_duration_on=0.3` and `min_duration_off=0.5`.
+## The design in short
 
-- **A**: `pyannote/segmentation-3.0` (ONNX export) + WeSpeaker ResNet34-LM (VoxCeleb). This is basically the pyannote 3.x recipe.
-- **B**: Rev `reverb-diarization-v1` segmentation + WeSpeaker ResNet34-LM.
-- **C**: `pyannote/segmentation-3.0` + NVIDIA TitaNet-small.
+- **Who it's for:** teams choosing a system for meeting notes, call analytics, medical scribes or subtitles. Their real question is *"which system works on my kind of audio, and is the gap real?"*
+- **Systems:** 18 at launch:
+  - open source: pyannote community-1, NVIDIA Nemotron-3-Diarization, Sortformer, DiariZen, 3D-Speaker, WhisperX
+  - diarization API: pyannoteAI
+  - STT APIs with speaker labels: AssemblyAI, Deepgram, Speechmatics, AWS, Google, Azure, ElevenLabs, Rev, Gladia, OpenAI
+- **Test data:** a hidden, newly recorded **52 h** set across 7 domains: meetings, video calls, 8 kHz phone, clinical, broadcast, noisy field and code-switch. The reference is built from close-talk mics and forced alignment, then checked by a second annotator on 15% of files.
+- **Primary metric:** DER pooled within each domain, then averaged with **equal weight per domain**.
+- **Settings:** **no collar, overlap scored, speaker count not given, system's own VAD**.
+- **Ranking:** a paired bootstrap over whole recordings. Systems whose difference isn't significant **share a tier**, instead of getting fake #3/#4 ranks.
+- **Always shown beside DER:** JER, the miss / false-alarm / confusion split, speaker-count error, overlap DER, the worst domain, version and run date, speed and $/hour.
 
-## Data
+<p align="center"><img src="docs/img/onepager.png" width="560" alt="One-page report"></p>
 
-- AMI test meetings IS1009a, TS3003a and EN2002b. Only the first 600 s of each is scored, with a UEM of [0, 600].
-- References are the word-aligned "only_words" RTTMs. I checked that they are identical to `pyannote/AMI-diarization-setup` for IS1009a and TS3003a (DER 0.0 between the two).
+## Leaderboard sketch
 
-## Reproduce
+How the results would look as a product. The domain is the first filter, statistically tied systems are grouped into tiers, and every score has a CI and an error breakdown.
 
-```bash
-python3 -m venv .venv && . .venv/bin/activate
-pip install sherpa-onnx pyannote.metrics soundfile numpy scipy pandas matplotlib pyarrow
-# download models (see run_systems.py for names) into models/, AMI parquet shards into data/hf/
-python prepare_data.py
-python run_systems.py
-python calibrate_threshold.py
-TUNED_ONLY=1 python run_systems.py
-python score.py && python analyze.py && python plots.py
-```
+![Leaderboard sketch](docs/img/leaderboard.png)
 
-## Notes to self
+*Every system name and number in the sketch is a placeholder for layout. The measured numbers are below.*
 
-- pyannote.metrics `collar` is the **total** width, while dscore's `--collar` is **per side**. So "0.25 s collar" in most papers means `collar=0.5` here.
-- Only 3 meetings, 30 min of audio per mic condition. This shows the method works; it doesn't rank these models.
+---
 
-## Results (strict DER %, first 10 min of 3 AMI test meetings)
+## Pilot: what I actually ran
+
+- **Audio:** AMI test meetings IS1009a, TS3003a and EN2002b, first 10 min each, recorded two ways:
+  - close-talk headset mix (**IHM**)
+  - single far-field mic (**SDM**)
+- **References:** the word-aligned "only_words" RTTMs. I verified they are identical to `pyannote/AMI-diarization-setup`.
+- **Systems:** all built with sherpa-onnx 2.0.3 on CPU.
+  - **A** = pyannote segmentation-3.0 + WeSpeaker ResNet34
+  - **B** = Rev reverb-diarization-v1 + WeSpeaker
+  - **C** = pyannote segmentation-3.0 + NVIDIA TitaNet-small
+- **Modes:**
+  - blind, with the default clustering threshold
+  - blind, with the threshold tuned on a *held-out* meeting (ES2004c)
+  - speaker count given (k=4)
+- **Scoring:** pyannote.metrics 4.2.0 under 3 settings (strict, 0.25 s collar, collar + skip overlap), for **54 scored runs** in total.
+
+### Results (strict DER %, lower is better)
 
 | System | IHM default | IHM dev-tuned | IHM k=4 | SDM default | SDM dev-tuned | SDM k=4 | RTF (CPU) |
 |---|---|---|---|---|---|---|---|
 | A pyannote-seg + WeSpeaker | 58.3 | 42.4 | 30.5 | 60.5 | 41.4 | 54.5 | 0.12 |
 | B Reverb-v1 + WeSpeaker | 74.6 | 58.8 | 56.0 | 81.3 | 66.4 | 79.4 | 0.16 |
-| C pyannote-seg + TitaNet | 61.3 | 25.9 | 27.8 | 82.9 | 34.5 | 34.9 | 0.06 |
+| C pyannote-seg + TitaNet | 61.3 | **25.9** | **27.8** | 82.9 | **34.5** | **34.9** | 0.06 |
 
-All tables, including per-file scores and the bootstrap, are in `results/tables.md`. The figures are in `results/`. Per-run outputs are in `runs/<system>/<mode>/*.rttm`.
+![Error breakdown](results/fig_breakdown.png)
+![Scoring settings](results/fig_settings.png)
 
-The main takeaways are written up in my report. In short:
-- The default clustering threshold over-counts speakers badly (up to 59 guessed for a 4-person meeting), and the default-vs-tuned choice flips the A/C ranking.
-- Lumping everyone into one speaker scored 15% DER (but 78% JER) on a clip where one person talks 96.6% of the time.
-- A 0.25 s collar removes 22% of the scored speech, and collar plus skip-overlap removes 41%.
+### What I learned from it
+
+1. **Defaults can flip a ranking.**
+   - With the default threshold, C guessed 30–59 speakers for a 4-person meeting.
+   - Tuned on one held-out meeting, C went from 61.3 to 25.9 DER.
+   - On defaults A beat C; after tuning, C beat A by 16 points.
+   - **So every open system on the board gets the same dev-set tuning.**
+2. **DER can be gamed.**
+   - In TS3003a, one person speaks 96.6% of the first 10 minutes.
+   - Putting everyone in one speaker scored 15.0% DER but 78% JER.
+   - **So JER and speaker-count error sit next to DER, and test-set curation caps files dominated by one speaker.**
+3. **The mic changes the gap.** With k=4, A ≈ C on close-talk audio (30.5 vs 27.8), but on the far-field mic A falls to 54.5 while C holds at 34.9.
+4. **Scoring settings change the number a lot.**
+   - A 0.25 s collar removes 22% of the scored speech, and collar + skip-overlap removes 41%.
+   - The same output scores 27.8, 21.8 or 16.1 depending on the setting.
+5. **Something I couldn't fully explain:** B has about 22% false alarm in every mode. It could be the model or my wrapper. That's exactly why the full process has a sanity-review step.
+
+> These absolute numbers are much worse than published ones, because the ONNX port uses simpler clustering and I scored only 10-minute crops. This tests the *method*. It isn't a ranking of these models.
+
+---
+
+## Repo layout
+
+```
+report/                 PDFs, leaderboard sketch, HTML sources of the report
+prepare_data.py         AMI audio + references from the HF mirror (diarizers-community/ami)
+run_systems.py          runs systems A/B/C → runs/<system>/<mode>/*.rttm
+calibrate_threshold.py  threshold sweep on held-out ES2004c
+score.py                DER / JER with pyannote.metrics, 3 scoring settings
+analyze.py              tables + paired bootstrap (1-min chunks and whole recordings)
+plots.py                figures in results/
+results/                scores.json, tables.md, figures
+runs/                   every system output (RTTM) + timing
+```
+
+## Reproduce
+
+```bash
+python3 -m venv .venv && . .venv/bin/activate
+pip install -r requirements.txt
+./download_models.sh                  # sherpa-onnx models → models/, AMI test shards → data/hf/
+python prepare_data.py                # wav + reference RTTMs from the shards
+python run_systems.py                 # blind (default threshold) + k=4
+python calibrate_threshold.py         # pick thresholds on held-out ES2004c
+TUNED_ONLY=1 python run_systems.py    # blind with tuned thresholds
+python score.py && python analyze.py && python plots.py
+```
+
+**Note:** pyannote.metrics' `collar` is the *total* width, while dscore's `--collar` is *per side*. So the usual "0.25 s collar" is `collar=0.5` in `score.py`.
+
+— Anmol Adwani
