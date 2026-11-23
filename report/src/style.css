@@ -1,0 +1,33 @@
+@page { size: A4; margin: 16mm 15mm 16mm 15mm; }
+:root { --ink:#1d1f23; --muted:#5b616b; --line:#d9dce1; --accent:#2f5d8a; --soft:#f3f5f8; --warn:#8a5a00; }
+* { box-sizing: border-box; }
+body { font-family: "Charter", "Georgia", serif; color: var(--ink); background:#fff; font-size: 10.6pt; line-height: 1.45; max-width: 800px; margin: 0 auto; padding: 16px; }
+h1, h2, h3, .kicker, .byline, nav, table, .note, .formula, .tldr b { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+h1 { font-size: 22pt; line-height: 1.15; margin: 4px 0 6px; letter-spacing: -0.3px; }
+h2 { font-size: 14pt; margin: 22px 0 6px; padding-top: 6px; border-top: 2px solid var(--ink); break-after: avoid; }
+h3 { font-size: 11.5pt; margin: 14px 0 4px; color: var(--accent); break-after: avoid; }
+p { margin: 6px 0; }
+.kicker { text-transform: uppercase; letter-spacing: 1.2px; font-size: 8.5pt; color: var(--muted); margin: 0; }
+.byline { color: var(--muted); font-size: 9.5pt; margin: 0 0 10px; }
+.tldr { background: var(--soft); border-left: 4px solid var(--accent); padding: 9px 12px; margin: 10px 0; }
+nav.toc { font-size: 9pt; color: var(--muted); columns: 2; margin: 8px 0 4px; }
+nav.toc ol { margin: 2px 0 0 0; padding-left: 18px; }
+table { border-collapse: collapse; width: 100%; margin: 8px 0 10px; font-size: 8.8pt; break-inside: auto; }
+table.small { font-size: 8pt; }
+th, td { border-bottom: 1px solid var(--line); padding: 4px 6px; text-align: left; vertical-align: top; }
+th { background: var(--soft); font-weight: 600; border-bottom: 1.5px solid #b9bec6; }
+tr { break-inside: avoid; }
+tr.total td { border-top: 1.5px solid #b9bec6; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+code { font-family: "SF Mono", Menlo, monospace; font-size: 0.86em; background: var(--soft); padding: 0 3px; border-radius: 2px; }
+.note { font-size: 9pt; background: #fbf7ee; border-left: 3px solid #d7b66a; padding: 6px 10px; margin: 8px 0; }
+.formula { text-align: center; background: var(--soft); padding: 7px; margin: 8px 0; font-size: 10pt; }
+ol.steps li { margin-bottom: 3px; }
+ul, ol { margin: 4px 0; padding-left: 20px; }
+li { margin-bottom: 2px; }
+figure { margin: 10px 0; text-align: center; break-inside: avoid; }
+figure img { max-width: 100%; }
+figcaption { font-size: 8.5pt; color: var(--muted); font-family: "Helvetica Neue", Arial, sans-serif; }
+.refs li { margin-bottom: 3px; }
+.footer { font-size: 8.5pt; color: var(--muted); margin-top: 16px; border-top: 1px solid var(--line); padding-top: 6px; }
+.good { color: #1f6f3f; font-weight: 600; } .bad { color: #a23a2a; font-weight: 600; }

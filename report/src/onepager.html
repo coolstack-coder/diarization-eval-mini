@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Anmol Adwani - Q1 One Pager</title>
+<link rel="stylesheet" href="style.css">
+<style>
+@page { size: A4; margin: 11mm 12mm; }
+body { font-size: 9.4pt; line-height: 1.36; padding: 0; }
+h1 { font-size: 16pt; margin: 0 0 2px; }
+h2 { font-size: 10.5pt; margin: 9px 0 3px; padding-top: 4px; border-top: 1.5px solid var(--ink); }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+table { font-size: 8.2pt; margin: 4px 0; }
+th, td { padding: 2.5px 5px; }
+ul { padding-left: 16px; margin: 2px 0; }
+li { margin-bottom: 1.5px; }
+.take { background: #eef4ee; border-left: 4px solid #3f8a5a; padding: 7px 10px; margin-top: 8px; font-family: "Helvetica Neue", Arial, sans-serif; font-size: 9.2pt; }
+</style>
+</head>
+<body>
+<p class="kicker">Voice Arena take-home · Q1 one-pager · Anmol Adwani</p>
+<h1>A diarization leaderboard that helps people choose, not just rank</h1>
+
+<h2>The eval in one paragraph</h2>
+<p>The board ranks "who spoke when" systems for teams building meeting tools, call analytics, medical scribes and subtitles. The question it answers is <b>"which system is best for my kind of audio, and is the difference real?"</b> There are 18 systems at launch: open models such as pyannote community-1, NVIDIA Nemotron-3-Diarization and DiariZen; diarization APIs such as pyannoteAI; and speech-to-text APIs with speaker labels from AssemblyAI, Deepgram, Speechmatics, AWS, Google, Azure, ElevenLabs, Rev, Gladia and OpenAI. All of them run on a <b>hidden, newly recorded 52-hour test set</b> covering 7 domains.</p>
+
+<div class="cols">
+<div>
+<h2>Core setup</h2>
+<table>
+<tr><th>Test data</th><td>~400 recordings, ~700 speakers, 7 domains (meetings, video calls, 8&nbsp;kHz phone, clinical, broadcast, noisy field, code-switch), accent-balanced English plus 4 other languages</td></tr>
+<tr><th>Reference</th><td>Close-talk mics plus forced alignment (≈20&nbsp;ms boundaries), human correction, 15% double-annotated; the human agreement floor is published</td></tr>
+<tr><th>Primary metric</th><td>DER, pooled per domain, then averaged over domains with equal weight</td></tr>
+<tr><th>Settings</th><td><b>No collar · overlap scored · speaker count not given · system's own VAD</b></td></tr>
+<tr><th>Also shown</th><td>Miss / FA / confusion, JER, overlap DER, speaker-count error, short-turn recall, cpWER, speed, $/hour</td></tr>
+<tr><th>Significance</th><td>Paired bootstrap over <i>recordings</i>, stratified by domain; systems whose gap isn't real share a <b>tier</b></td></tr>
+</table>
+</div>
+<div>
+<h2>The 4 choices that matter most</h2>
+<ul>
+<li><b>Collar 0.</b> The reference is machine-aligned, so it doesn't need forgiving. In my pilot, a 0.25&nbsp;s collar deleted 22% of scored speech, mostly the hard turn changes.</li>
+<li><b>Overlap scored.</b> It was 17% of speech in my pilot meetings. STT APIs can't output it, so the board shows that penalty separately instead of hiding it.</li>
+<li><b>Blind speaker count ranks; the hinted run sits beside it.</b> Users rarely know the count. In my pilot, giving the count cut DER by up to 48 points on default settings.</li>
+<li><b>Tiers, not ranks.</b> A 0.3-point gap inside overlapping confidence intervals is not a win. The procurement reader is the one who can least tell.</li>
+</ul>
+</div>
+</div>
+
+<h2>Pilot I ran (3 AMI meetings × 2 mics × 3 open pipelines, 10 min each)</h2>
+<table>
+<tr><th>Setup</th><td>AMI IS1009a, TS3003a, EN2002b · headset mix vs far-field mic · sherpa-onnx builds of A = pyannote-seg + WeSpeaker, B = Reverb + WeSpeaker, C = pyannote-seg + TitaNet · 54 runs scored with pyannote.metrics · code: github.com/coolstack-coder/diarization-eval-mini</td></tr>
+<tr><th>Defaults flip rankings</th><td>Default threshold: C guessed 30–59 speakers for 4-person meetings, and A beat C (58.3 vs 61.3 DER). After tuning on one held-out meeting, C beat A by 16 points (25.9 vs 42.4). <b>→ every open system gets the same dev-set tuning.</b></td></tr>
+<tr><th>DER can be gamed</th><td>One person spoke 96.6% of a clip; putting everyone in one speaker scored 15% DER but 78% JER. <b>→ JER and speaker-count error sit next to DER; curation caps dominant-speaker files.</b></td></tr>
+<tr><th>Mics change the gap</th><td>With k=4, A ≈ C on close-talk audio (30.5 vs 27.8, a tie), but on far-field A 54.5 vs C 34.9. <b>→ far-field and phone are separate domains.</b></td></tr>
+<tr><th>Settings matter</th><td>The same output scores 27.8 strict, 21.8 with a collar, 16.1 with collar + skip-overlap. Overlap is 17% of speech.</td></tr>
+</table>
+
+<h2>Fairness rules, briefly</h2>
+<p>Same audio bytes for every system, phone audio left at 8&nbsp;kHz · APIs at defaults, open systems all tuned on the public dev set with one fixed procedure, plus at most one vendor config tuned on dev · a single open converter turns word labels into segments · a failed file counts as 100% miss and is shown publicly · version string and run date shown on every row · zero-retention APIs and quarterly test rotation · offline, streaming and transcript tracks never mixed in one ranking.</p>
+
+<div class="take"><b>Main takeaway.</b> A diarization score means little without its <b>settings, domain and confidence interval</b>. In one hour of public audio, defaults flipped a ranking, the scoring settings changed DER by 1.7×, and one-speaker output got a low DER. So the board ranks on strict, blind, domain-balanced DER, groups statistical ties into tiers, and always shows JER, speaker-count error and the worst domain alongside.</div>
+</body>
+</html>

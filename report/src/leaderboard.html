@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Diarization Leaderboard Sketch</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#16181d;--muted:#666d78;--line:#e3e6ea;--acc:#2f5d8a;--miss:#c9822b;--fa:#7f8fa6;--conf:#b4473a;--t1:#e6f0e9;--t2:#eef2f7;--t3:#f7f3ea}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.4 "Helvetica Neue",Helvetica,Arial,sans-serif}
+.wrap{width:1720px;margin:0 auto;padding:22px 26px}
+.banner{background:#fff6dc;border:1px dashed #d1a640;color:#6b5110;padding:6px 10px;border-radius:6px;font-size:12px;margin-bottom:12px}
+header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:12px}
+h1{font-size:22px;margin:0}
+.sub{color:var(--muted);font-size:12.5px;margin-top:3px}
+.meta{font-size:12px;color:var(--muted);text-align:right}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.tab{padding:8px 14px;border-radius:7px 7px 0 0;color:var(--muted);font-weight:500}
+.tab.on{background:var(--card);color:var(--ink);border:1px solid var(--line);border-bottom-color:var(--card);margin-bottom:-1px}
+.tab small{color:var(--muted);font-weight:400}
+.grid{display:grid;grid-template-columns:1fr 340px;gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px}
+.filters{display:flex;flex-wrap:wrap;gap:14px;padding:12px 14px;border-bottom:1px solid var(--line);align-items:center}
+.fg{display:flex;align-items:center;gap:6px}
+.fg>span{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-right:2px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:12px;background:#fff}
+.chip.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.sel{border:1px solid var(--line);border-radius:6px;padding:3px 8px;font-size:12px}
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:600;text-align:left;padding:8px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:8px 8px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap}
+tr.tier1 td:first-child{border-left:4px solid #3f8a5a}
+tr.tier2 td:first-child{border-left:4px solid #7c97b8}
+tr.tier3 td:first-child{border-left:4px solid #c7a96a}
+tr.sel-row{background:#f0f5fb}
+.tierlab td{background:var(--bg);font-size:11px;color:var(--muted);padding:5px 10px;font-weight:600}
+.sys b{font-size:13.5px}.sys div{font-size:11px;color:var(--muted)}
+.badge{font-size:10.5px;border-radius:4px;padding:1px 6px;border:1px solid var(--line);color:var(--muted)}
+.badge.open{color:#2e6b45;border-color:#b9d8c4}.badge.api{color:#2f5d8a;border-color:#bccde0}.badge.nc{color:#8a5a00;border-color:#e2cf9f}
+.der{font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}
+.ci{font-size:11px;color:var(--muted)}
+.cibar{position:relative;width:120px;height:14px}
+.cibar .axis{position:absolute;top:6px;left:0;right:0;height:2px;background:#eceff3}
+.cibar .rng{position:absolute;top:3px;height:8px;background:#b7c8dc;border-radius:4px}
+.cibar .pt{position:absolute;top:1px;width:3px;height:12px;background:var(--acc);border-radius:1px}
+.stack{display:flex;width:110px;height:10px;border-radius:3px;overflow:hidden;background:#eef0f3}
+.stack i{display:block;height:100%}
+.num{font-variant-numeric:tabular-nums;text-align:right}
+.warn{color:#a23a2a;font-weight:600}
+.muted{color:var(--muted)}
+.legend{display:flex;gap:12px;font-size:11px;color:var(--muted);padding:8px 14px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.side .card{padding:14px;margin-bottom:14px}
+.side h3{margin:0 0 8px;font-size:14px}
+.side h4{margin:12px 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+.dom{display:grid;grid-template-columns:110px 1fr 40px;gap:6px;align-items:center;font-size:12px;margin:4px 0}
+.dom .b{height:9px;background:var(--acc);border-radius:3px}
+.dom .b.w{background:var(--conf)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px}
+.kv span:nth-child(odd){color:var(--muted)}
+.clip{border:1px solid var(--line);border-radius:6px;padding:7px;font-size:11.5px;margin:6px 0;display:flex;gap:8px;align-items:center}
+.play{width:22px;height:22px;border-radius:50%;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;flex:none}
+.method li{margin:3px 0;font-size:12px}
+.method{padding-left:16px;margin:0}
+.note{font-size:11.5px;color:var(--muted);padding:10px 14px}
+.mk{display:inline-flex;width:17px;height:17px;border-radius:50%;background:#d1173f;color:#fff;font:700 10px/17px Arial;justify-content:center;margin-left:5px;vertical-align:1px}
+.annos{display:flex;gap:18px;padding:10px 14px;border-top:1px dashed #e5b8c2;background:#fff8fa;font-size:12px;color:#7a1b33;flex-wrap:wrap}
+.annos b{color:#d1173f}
+.anno{position:absolute;background:#fff;border:1.5px solid #d14;color:#a01030;font:600 11px/1.3 "Helvetica Neue",Arial;padding:4px 7px;border-radius:6px;max-width:190px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.rel{position:relative}
+.weights{font-size:12px}
+.weights .row{display:grid;grid-template-columns:100px 1fr 30px;gap:6px;align-items:center;margin:4px 0}
+.slider{height:4px;background:#e3e7ec;border-radius:2px;position:relative}
+.slider b{position:absolute;top:-4px;width:12px;height:12px;border-radius:50%;background:var(--acc)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="banner"><b>Product sketch.</b> System names are generic and every number on this page is made up to show the layout. These are <b>not</b> measured results; the real pilot numbers are in the main document, §6.</div>
+
+<header>
+  <div>
+    <h1>Voice Arena · Speaker Diarization Leaderboard</h1>
+    <div class="sub">Who spoke when, measured on 52 h of hidden, consented audio across 7 real-use domains. Strict scoring: no collar, overlap counted, speaker count not given.</div>
+  </div>
+  <div class="meta">Test set v1.2 · Reference v1.2.1 · Last full run 18 Nov 2026<br>Methodology · Scoring code · Changelog</div>
+</header>
+
+<div class="tabs">
+  <div class="tab on">Offline · Blind <small>(ranked)</small></div>
+  <div class="tab">Offline · Speaker count given</div>
+  <div class="tab">Streaming <small>@1 s / 2 s latency</small></div>
+  <div class="tab">Transcript-aware <small>(cpWER)</small></div>
+  <div class="tab">Classic benchmarks <small>(AMI, VoxConverse, DIHARD III)</small></div>
+</div>
+
+<div class="grid">
+<div class="card rel">
+  <div class="filters">
+    <div class="fg"><span>Domain<i class="mk">1</i></span>
+      <span class="chip">All (macro avg)</span><span class="chip on">Meetings</span><span class="chip">Video calls</span><span class="chip">Phone 8 kHz</span><span class="chip">Clinical</span><span class="chip">Broadcast</span><span class="chip">Noisy field</span><span class="chip">Code-switch</span>
+    </div>
+    <div class="fg"><span>Deploy</span><span class="chip on">All</span><span class="chip">Self-host</span><span class="chip">API</span></div>
+    <div class="fg"><span>Speakers</span><select class="sel"><option>Any</option></select></div>
+    <div class="fg"><span>Licence</span><select class="sel"><option>Commercial use OK</option></select></div>
+    <div class="fg"><span>Sort</span><select class="sel"><option>DER (strict)</option></select></div>
+  </div>
+
+  <table>
+    <thead><tr>
+      <th>Tier</th><th>System</th><th class="num">DER</th><th>95% CI<i class="mk">5</i></th><th>Error mix</th><th class="num">JER</th><th class="num">Overlap DER<i class="mk">3</i></th><th class="num">Spk count<br>exact</th><th>Worst domain<i class="mk">4</i></th><th class="num">Speed</th><th class="num">$ / hour</th><th>Version · run</th>
+    </tr></thead>
+    <tbody>
+      <tr class="tierlab"><td colspan="12">TIER 1 · statistically tied (paired bootstrap, 95%) <i class="mk">2</i></td></tr>
+      <tr class="tier1"><td>1</td><td class="sys"><b>Diarizer Alpha</b> <span class="badge api">API</span><div>Vendor A · diarization-only</div></td><td class="num der">11.8</td><td><div class="cibar"><div class="axis"></div><div class="rng" style="left:18px;width:20px"></div><div class="pt" style="left:27px"></div></div><div class="ci">10.9 – 12.8</div></td><td><div class="stack"><i style="width:30%;background:var(--miss)"></i><i style="width:20%;background:var(--fa)"></i><i style="width:50%;background:var(--conf)"></i></div></td><td class="num">14.1</td><td class="num">31.0</td><td class="num">71%</td><td>Phone 8 kHz · 17.9</td><td class="num">RTF 0.02</td><td class="num">$0.40</td><td class="muted">p-2 · 12 Nov</td></tr>
+      <tr class="tier1 sel-row"><td>1</td><td class="sys"><b>OpenSeg Large</b> <span class="badge open">Open</span><div>Lab B · self-hosted, 1×L4</div></td><td class="num der">12.3</td><td><div class="cibar"><div class="axis"></div><div class="rng" style="left:20px;width:22px"></div><div class="pt" style="left:30px"></div></div><div class="ci">11.3 – 13.4</div></td><td><div class="stack"><i style="width:34%;background:var(--miss)"></i><i style="width:16%;background:var(--fa)"></i><i style="width:50%;background:var(--conf)"></i></div></td><td class="num">15.0</td><td class="num">28.4</td><td class="num">64%</td><td>Code-switch · 19.2</td><td class="num">RTF 0.04</td><td class="num">self-host</td><td class="muted">v2 · 14 Nov</td></tr>
+      <tr class="tierlab"><td colspan="12">TIER 2</td></tr>
+      <tr class="tier2"><td>3</td><td class="sys"><b>TalkScribe Pro</b> <span class="badge api">API</span><div>Vendor C · STT + speaker labels</div></td><td class="num der">15.6</td><td><div class="cibar"><div class="axis"></div><div class="rng" style="left:34px;width:22px"></div><div class="pt" style="left:44px"></div></div><div class="ci">14.4 – 16.9</div></td><td><div class="stack"><i style="width:52%;background:var(--miss)"></i><i style="width:10%;background:var(--fa)"></i><i style="width:38%;background:var(--conf)"></i></div></td><td class="num">18.7</td><td class="num warn">62.0 ⓘ</td><td class="num">58%</td><td>Noisy field · 24.1</td><td class="num">RTF 0.05</td><td class="num">$0.37</td><td class="muted">3-7 · 17 Nov</td></tr>
+      <tr class="tier2"><td>3</td><td class="sys"><b>NovaLabels</b> <span class="badge api">API</span><div>Vendor D · STT + speaker labels</div></td><td class="num der">16.1</td><td><div class="cibar"><div class="axis"></div><div class="rng" style="left:36px;width:24px"></div><div class="pt" style="left:47px"></div></div><div class="ci">14.8 – 17.5</div></td><td><div class="stack"><i style="width:48%;background:var(--miss)"></i><i style="width:12%;background:var(--fa)"></i><i style="width:40%;background:var(--conf)"></i></div></td><td class="num">17.2</td><td class="num warn">60.3 ⓘ</td><td class="num">66%</td><td>Clinical · 22.0</td><td class="num">RTF 0.01</td><td class="num">$0.26</td><td class="muted">v2 · 16 Nov</td></tr>
+      <tr class="tier2"><td>3</td><td class="sys"><b>StreamSort Offline</b> <span class="badge open">Open</span><div>Lab E · max 8 speakers</div></td><td class="num der">16.4</td><td><div class="cibar"><div class="axis"></div><div class="rng" style="left:37px;width:24px"></div><div class="pt" style="left:48px"></div></div><div class="ci">15.1 – 17.8</div></td><td><div class="stack"><i style="width:28%;background:var(--miss)"></i><i style="width:18%;background:var(--fa)"></i><i style="width:54%;background:var(--conf)"></i></div></td><td class="num">21.9</td><td class="num">33.5</td><td class="num">55%</td><td>Broadcast (9+ spk) · 34.7</td><td class="num">RTF 0.01</td><td class="num">self-host</td><td class="muted">1.0 · 14 Nov</td></tr>
+      <tr class="tierlab"><td colspan="12">TIER 3</td></tr>
+      <tr class="tier3"><td>6</td><td class="sys"><b>ClusterKit</b> <span class="badge open">Open</span> <span class="badge nc">Non-commercial</span><div>Lab F · self-hosted</div></td><td class="num der">19.8</td><td><div class="cibar"><div class="axis"></div><div class="rng" style="left:50px;width:28px"></div><div class="pt" style="left:63px"></div></div><div class="ci">18.2 – 21.6</div></td><td><div class="stack"><i style="width:30%;background:var(--miss)"></i><i style="width:22%;background:var(--fa)"></i><i style="width:48%;background:var(--conf)"></i></div></td><td class="num">24.4</td><td class="num">41.2</td><td class="num">39%</td><td>Phone 8 kHz · 31.0</td><td class="num">RTF 0.09</td><td class="num">self-host</td><td class="muted">0.9 · 14 Nov</td></tr>
+      <tr class="tier3"><td>6</td><td class="sys"><b>CloudSpeech Batch</b> <span class="badge api">API</span><div>Vendor G · STT + labels · <span class="warn">3 failed files</span></div></td><td class="num der">20.5</td><td><div class="cibar"><div class="axis"></div><div class="rng" style="left:52px;width:30px"></div><div class="pt" style="left:66px"></div></div><div class="ci">18.7 – 22.5</div></td><td><div class="stack"><i style="width:55%;background:var(--miss)"></i><i style="width:9%;background:var(--fa)"></i><i style="width:36%;background:var(--conf)"></i></div></td><td class="num">22.8</td><td class="num warn">64.9 ⓘ</td><td class="num">47%</td><td>Code-switch · 29.3</td><td class="num">RTF 0.08</td><td class="num">$0.96</td><td class="muted">ch3 · 15 Nov</td></tr>
+    </tbody>
+  </table>
+  <div class="legend"><span><i style="background:var(--miss)"></i>Missed speech</span><span><i style="background:var(--fa)"></i>False alarm</span><span><i style="background:var(--conf)"></i>Speaker confusion</span><span>ⓘ Outputs one speaker per word, so it cannot mark overlap (structural penalty)</span><span>Human agreement floor on Meetings: <b>4.6</b> DER</span></div>
+  <div class="note">Rows sharing a tier are not significantly different. Sorting within a tier is by point estimate only. Hover a DER to see all 7 domains; click a row for the detail panel.</div>
+  <div class="annos"><span><b>1</b> Domain is the first filter, because the ranking changes per domain</span><span><b>2</b> Tiers before decimals: tied systems share a tier</span><span><b>3</b> Single-label STT systems can't output overlap; flagged, not hidden</span><span><b>4</b> Worst domain sits next to the average</span><span><b>5</b> Every score carries its confidence interval</span><span><b>6</b> Users weight accuracy / cost / speed for their case</span></div>
+
+</div>
+
+<div class="side">
+  <div class="card">
+    <h3>OpenSeg Large <span class="badge open">Open</span></h3>
+    <div class="kv"><span>Version</span><span>v2 (commit a1c3…) · run 14 Nov 2026</span><span>Config</span><span>defaults, no count hint</span><span>Hardware</span><span>1× NVIDIA L4, RTF 0.04</span><span>Licence</span><span>CC-BY-4.0 · commercial OK</span><span>Failed files</span><span>0 / 412</span></div>
+    <h4>DER by domain (strict)</h4>
+    <div class="dom"><span>Meetings</span><div class="b" style="width:52%"></div><span class="num">12.3</span></div>
+    <div class="dom"><span>Video calls</span><div class="b" style="width:40%"></div><span class="num">9.6</span></div>
+    <div class="dom"><span>Phone 8 kHz</span><div class="b" style="width:60%"></div><span class="num">14.2</span></div>
+    <div class="dom"><span>Clinical</span><div class="b" style="width:45%"></div><span class="num">10.8</span></div>
+    <div class="dom"><span>Broadcast</span><div class="b" style="width:50%"></div><span class="num">11.9</span></div>
+    <div class="dom"><span>Noisy field</span><div class="b" style="width:68%"></div><span class="num">16.4</span></div>
+    <div class="dom"><span>Code-switch</span><div class="b w" style="width:80%"></div><span class="num">19.2</span></div>
+    <h4>Where it fails · listen</h4>
+    <div class="clip"><div class="play">▶</div><div><b>Backchannels dropped</b> · short-turn recall 61%<br><span class="muted">clinical_041 · 03:12–03:20</span></div></div>
+    <div class="clip"><div class="play">▶</div><div><b>Two similar voices merged</b><br><span class="muted">meeting_118 · speakers 2 &amp; 4</span></div></div>
+    <h4>History</h4>
+    <svg width="290" height="46"><polyline fill="none" stroke="#2f5d8a" stroke-width="2" points="5,10 70,18 135,22 200,30 285,34"/><g fill="#2f5d8a"><circle cx="5" cy="10" r="3"/><circle cx="70" cy="18" r="3"/><circle cx="135" cy="22" r="3"/><circle cx="200" cy="30" r="3"/><circle cx="285" cy="34" r="3"/></g><text x="5" y="44" font-size="9" fill="#666">Q4-25</text><text x="255" y="44" font-size="9" fill="#666">Q4-26</text></svg>
+  </div>
+  <div class="card">
+    <h3>Pick for my use case<i class="mk">6</i></h3>
+    <div class="weights">
+      <div class="row"><span>Accuracy</span><div class="slider"><b style="left:70%"></b></div><span>70%</span></div>
+      <div class="row"><span>Cost</span><div class="slider"><b style="left:20%"></b></div><span>20%</span></div>
+      <div class="row"><span>Speed</span><div class="slider"><b style="left:10%"></b></div><span>10%</span></div>
+      <div class="muted" style="margin-top:6px">Re-ranks within your domain filter. Your weights change the order; they don't change the scores.</div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>How this is scored</h3>
+    <ul class="method"><li>DER, no collar, overlap scored, system's own VAD</li><li>Speaker count not given (see other tab for hinted)</li><li>Macro average over 7 domains, equal weight</li><li>Paired bootstrap over recordings, 10k resamples</li><li>Word-level outputs → segments (gap &lt; 0.5 s), open converter</li><li>Failures = 100% missed speech, counted publicly</li></ul>
+  </div>
+</div>
+</div>
+</div>
+</body>
+</html>
