@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Anmol Adwani - Q1 Main - Diarization Eval Design</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="cover">
+  <p class="kicker">Voice Arena take-home · Question 1</p>
+  <h1>Designing a public leaderboard for speaker diarization</h1>
+  <p class="byline">Anmol Adwani · November 2026</p>
+  <div class="tldr">
+    <b>Short version.</b> The leaderboard ranks systems on <b>strict DER</b>: no collar, overlapping speech scored, and the system is <i>not</i> told how many speakers there are. Each recording type (meetings, phone calls, clinics, video calls, broadcast, noisy field audio, code-switched speech) counts equally in the average. The hidden test set is about 52 hours, with references built from close-talk mics plus forced alignment and checked by a second annotator. A system is only ranked above another when a paired bootstrap says the gap is real. Otherwise they share a tier.
+    I also ran a small version of this on 3 public AMI meetings with 3 open pipelines (§6). That pilot changed two of my own decisions.
+  </div>
+</header>
+
+<nav class="toc">
+  <b>Contents</b>
+  <ol>
+    <li>Purpose: who uses this and what they decide</li>
+    <li>Models: what gets evaluated and how it stays fair</li>
+    <li>Test data and the reference</li>
+    <li>Metrics and scoring settings</li>
+    <li>Evaluation process: raw audio to published leaderboard</li>
+    <li>Pilot: a small version I actually ran</li>
+    <li>What could make this misleading</li>
+    <li>Final reflection</li>
+    <li>Sources</li>
+  </ol>
+</nav>
+
+<!-- ============================================================ -->
+<h2 id="purpose">1. Purpose</h2>
+
+<p>The leaderboard has one job: help someone pick a diarization system for <i>their</i> audio. One overall number can't do that, because a system that is great on podcasts can fall apart on 8&nbsp;kHz phone calls. So I designed it around the decisions people actually make:</p>
+
+<table>
+<thead><tr><th>Who</th><th>The decision they make</th><th>What they need from the board</th></tr></thead>
+<tbody>
+<tr><td><b>Product / eng lead</b> at a meeting-notes, call-analytics or medical-scribe company</td><td>Which API or model to build on (buy vs. self-host)</td><td>Score <i>on their domain</i> (filter), price per hour, latency, licence, and whether the gap to #2 is real</td></tr>
+<tr><td><b>ML engineer</b> already running a system</td><td>Is it worth switching or retraining? Where does mine fail?</td><td>Error breakdown (missed speech vs. false alarm vs. speaker confusion), overlap and short-turn scores, speaker-count accuracy</td></tr>
+<tr><td><b>Vendor / model builder</b></td><td>What to fix next, and whether a release actually improved</td><td>Per-domain scores over time, version history, confidence intervals</td></tr>
+<tr><td><b>Researcher</b></td><td>How a new method compares under strict, reproducible conditions</td><td>Exact scoring settings, public dev set, open scoring code</td></tr>
+<tr><td><b>Procurement / non-technical buyer</b></td><td>Short-list 2–3 vendors to trial</td><td>Plain-language tiers ("these three are statistically tied") instead of a fake precise ranking</td></tr>
+</tbody>
+</table>
+
+<p class="note">The last row shaped the design more than I expected. If two systems are 0.3 points apart with overlapping confidence intervals, showing them as "#3" and "#4" is misleading to exactly the person least able to tell. That is why rank tiers come up again in §5.</p>
+
+<!-- ============================================================ -->
+<h2 id="models">2. Models</h2>
+
+<h3>2.1 Types of systems</h3>
+<ul>
+  <li><b>Open-source, self-hosted, offline:</b> pyannote, NVIDIA NeMo / Sortformer, DiariZen, 3D-Speaker. We run these on our own hardware.</li>
+  <li><b>Diarization-only commercial APIs:</b> e.g. pyannoteAI. You send audio and get back speaker segments only.</li>
+  <li><b>Speech-to-text APIs that also label speakers:</b> AssemblyAI, Deepgram, Speechmatics, AWS, Google, Azure, ElevenLabs, Rev, Gladia, OpenAI. These return <i>words</i> with speaker tags, not segments, so they need a conversion step (§2.3).</li>
+  <li><b>Streaming / live systems:</b> streaming Sortformer, Nemotron-3-Diarization in low-latency mode, AssemblyAI / Speechmatics / Azure real-time. These are scored on a separate track, because comparing a system that sees 0.3&nbsp;s of future audio with one that sees the whole file is not fair.</li>
+</ul>
+
+<h3>2.2 Named list for launch</h3>
+<p>I checked every row against the vendor's docs or model card in the week of 23 Nov 2026. Vendors rename models often: AssemblyAI renamed its models on 17 Nov, and OpenAI's diarize model is now marked deprecated. So this list gets re-checked right before each run, and the exact version string goes onto the leaderboard.</p>
+
+<table class="small">
+<thead><tr><th>#</th><th>Company</th><th>Exact model / product</th><th>Type</th><th>How we run it</th><th>Speaker-count hint?</th><th>Outputs overlap?</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>pyannote</td><td><code>pyannote/speaker-diarization-community-1</code> (pyannote.audio 4.x)</td><td>Open source, offline</td><td>Self-hosted on GPU, HF gated model</td><td>yes (num / min / max)</td><td>yes</td></tr>
+<tr><td>2</td><td>pyannote</td><td><code>pyannote/speaker-diarization-3.1</code></td><td>Open source, offline (legacy baseline)</td><td>Self-hosted</td><td>yes</td><td>yes</td></tr>
+<tr><td>3</td><td>pyannoteAI</td><td><code>precision-2</code> (API default) and <code>precision-3</code></td><td>Commercial diarization API</td><td>API: <code>POST /v1/diarize</code></td><td>yes</td><td>yes (+ exclusive mode)</td></tr>
+<tr><td>4</td><td>NVIDIA</td><td><code>nvidia/Nemotron-3-Diarization</code></td><td>Open weights, offline + streaming</td><td>Self-hosted, NeMo</td><td>no (max 8 speakers)</td><td>yes</td></tr>
+<tr><td>5</td><td>NVIDIA</td><td><code>nvidia/diar_streaming_sortformer_4spk-v2.1</code></td><td>Open weights, streaming</td><td>Self-hosted, NeMo, fixed latency configs</td><td>no (max 4 speakers)</td><td>yes</td></tr>
+<tr><td>6</td><td>Brno Univ. of Tech. (BUT)</td><td>DiariZen <code>wavlm-large-s80-md-v2</code></td><td>Open source, offline</td><td>Self-hosted (weights are CC BY-NC, so research use only)</td><td>no</td><td>yes</td></tr>
+<tr><td>7</td><td>Alibaba (ModelScope)</td><td>3D-Speaker diarization recipe (CAM++ embeddings)</td><td>Open source, offline</td><td>Self-hosted</td><td>no</td><td>optional</td></tr>
+<tr><td>8</td><td>m-bain (open source)</td><td>WhisperX v3 (Whisper large-v3 + community-1)</td><td>Open source, ASR + speaker labels</td><td>Self-hosted</td><td>yes (min / max)</td><td>no (word-level)</td></tr>
+<tr><td>9</td><td>AssemblyAI</td><td><code>assemblyai-stt-3-7</code> with <code>speaker_labels=true</code></td><td>STT API + labels (also real-time)</td><td>API</td><td>yes</td><td>no</td></tr>
+<tr><td>10</td><td>Deepgram</td><td>Nova-3 with <code>diarize_model=v2</code></td><td>STT API + labels</td><td>API</td><td>no</td><td>no</td></tr>
+<tr><td>11</td><td>Speechmatics</td><td>Batch STT, <code>enhanced</code>, <code>diarization: "speaker"</code></td><td>STT API + labels (also real-time)</td><td>API</td><td>real-time only (max_speakers)</td><td>no</td></tr>
+<tr><td>12</td><td>Amazon (AWS)</td><td>Amazon Transcribe, <code>ShowSpeakerLabels</code></td><td>STT API + labels (also streaming)</td><td>API</td><td>yes (MaxSpeakerLabels ≤ 30)</td><td>no</td></tr>
+<tr><td>13</td><td>Google Cloud</td><td>Speech-to-Text v2 <code>chirp_3</code> + <code>diarization_config</code></td><td>STT API + labels (batch only)</td><td>API (BatchRecognize)</td><td>min / max count</td><td>no</td></tr>
+<tr><td>14</td><td>Microsoft</td><td>Azure AI Speech: Fast Transcription (diarization) and ConversationTranscriber (live)</td><td>STT API + labels (also real-time)</td><td>API</td><td>maxSpeakers</td><td>no</td></tr>
+<tr><td>15</td><td>ElevenLabs</td><td>Scribe (v2 API id; v3 announced), <code>diarize=true</code></td><td>STT API + labels</td><td>API</td><td>yes (≤ 32)</td><td>no</td></tr>
+<tr><td>16</td><td>Rev</td><td>Rev.ai async, <code>diarization_type=premium</code></td><td>STT API + labels</td><td>API</td><td>yes (some languages)</td><td>no</td></tr>
+<tr><td>17</td><td>Gladia</td><td>Solaria STT, <code>diarization: true</code></td><td>STT API + labels</td><td>API</td><td>yes</td><td>no</td></tr>
+<tr><td>18</td><td>OpenAI</td><td><code>gpt-4o-transcribe-diarize</code> (marked deprecated)</td><td>STT API + labels</td><td>API, <code>diarized_json</code></td><td>no (known-speaker refs only)</td><td>no</td></tr>
+</tbody>
+</table>
+
+<p class="note">Two things I didn't expect from this table. First, <b>almost every STT API returns one speaker per word, so none of them can represent overlapping speech.</b> They pay a structural penalty under any metric that scores overlap. I decided that is correct (§4.2), but the board has to show it clearly so it isn't hidden. Second, Gladia says its diarization runs on pyannoteAI. Some "different" systems share an engine, and the board should say so.</p>
+
+<h3>2.3 Keeping the comparison fair</h3>
+<p>These systems differ in what they take as input, what they return, and what knobs they expose. These are the rules I'd hold every system to:</p>
+<ol>
+  <li><b>Same audio bytes.</b> Every system gets the same file: original sample rate, mono, lossless WAV/FLAC. Phone audio stays 8&nbsp;kHz, because that is what a call-centre customer would send. We don't denoise or enhance anything.</li>
+  <li><b>Same tuning budget for everyone.</b> APIs run with their documented defaults. For open-source systems, <i>we</i> tune the free parameters, like the clustering threshold, on the <b>public dev set</b> with one fixed procedure, because the pilot showed defaults can flip a ranking (§6.3). Any vendor may also submit <i>one</i> config tuned on dev, never on test. All configs are frozen and published.</li>
+  <li><b>Two tracks for the speaker-count question.</b> The <b>Blind</b> track (primary) gives no count. The <b>Hinted</b> track gives the true count to systems that accept one. Systems without a hint parameter show "n/a" there and are not scored as zero.</li>
+  <li><b>One converter for word-level outputs.</b> Words carrying the same speaker label are merged into a segment when the gap between them is under 0.5&nbsp;s. Each segment runs from the first word's start to the last word's end. The converter is open-sourced, and I report how much DER it changes on a dev subset where we have both forms.</li>
+  <li><b>Language is given to everyone who needs it.</b> STT systems need a language code. All systems get the same one, and auto-detect counts as a separate config.</li>
+  <li><b>Failures count.</b> A timeout, API error or empty output scores as 100% missed speech for that file, and the failure count is published. Silently dropping files is how leaderboards flatter systems.</li>
+  <li><b>Same time window.</b> All API systems run within the same 7 days, with the model/version string and date logged. APIs change behind the same name, so we re-run every quarter and on vendor request.</li>
+  <li><b>Separate tracks, not mixed ranks.</b> Offline, Streaming (at fixed latency budgets of about 1&nbsp;s and 2&nbsp;s) and Transcript-aware (cpWER via MeetEval, for STT systems) are shown in separate tables.</li>
+  <li><b>Hidden test, zero retention.</b> Test audio is never public. We use zero-retention or no-training options on every API, and rotate about 20% of the test set each quarter so nobody can overfit to it.</li>
+  <li><b>Same hardware for speed numbers.</b> Self-hosted systems run on one fixed GPU type for the real-time factor. Speed is reported but not used for ranking.</li>
+</ol>
+
+<!-- ============================================================ -->
+<h2 id="data">3. Test data and the reference</h2>
+
+<h3>3.1 What we would record or collect</h3>
+<p>Public sets are useful but mostly old, mostly English meetings, and probably already in many training sets. They go on a <b>public dev set</b> and a "classic benchmarks" tab. The ranked test set is new, consented audio that we record or license:</p>
+
+<table>
+<thead><tr><th>Domain</th><th>Speakers / file</th><th>Setting and devices</th><th>Hours (test)</th><th>Why it's there</th></tr></thead>
+<tbody>
+<tr><td>In-person meetings</td><td>3–8</td><td>Conference rooms of different sizes; table-centre mic and laptop mic, plus a close-talk headset per person used only to build the reference</td><td>12</td><td>Biggest commercial use; far-field audio, overlap</td></tr>
+<tr><td>Video calls</td><td>2–6</td><td>Zoom/Meet/Teams recordings, compressed codecs, laptop and earbud mics, people talking over each other with network lag</td><td>8</td><td>Most meeting-notes products actually see this</td></tr>
+<tr><td>Phone / call centre</td><td>2–3</td><td>8&nbsp;kHz narrowband, hold music, IVR prompts, agent with headset vs customer on a mobile in the street</td><td>10</td><td>Call analytics. Short turns, agent/customer voices that can sound similar</td></tr>
+<tr><td>Clinical consults</td><td>2–4</td><td>Doctor, patient and sometimes a family member; phone on the desk; mostly role-played by actors from real scripts</td><td>6</td><td>Medical scribes; a mistake here changes who said what in a medical record</td></tr>
+<tr><td>Broadcast / podcast / panels</td><td>2–10+</td><td>Studio and remote guests, background music, interruptions</td><td>6</td><td>Subtitles, media; many speakers</td></tr>
+<tr><td>Noisy field</td><td>2–5</td><td>Café, car, street, kitchen with kids; phone mic held or in pocket</td><td>5</td><td>Robustness; where demos break</td></tr>
+<tr><td>Multilingual / code-switch</td><td>2–5</td><td>Hindi–English, Spanish–English, Mandarin, Arabic; mixed devices</td><td>5</td><td>Speaker models shouldn't care about language. Often they do</td></tr>
+<tr class="total"><td>Total</td><td></td><td></td><td><b>52 h</b></td><td>≈ 400 recordings, 5–45 min each</td></tr>
+</tbody>
+</table>
+
+<ul>
+  <li><b>Speakers:</b> about 700 unique people. Nobody appears in both dev and test. We balance gender and include ages from 18 to 70+, plus a deliberate set of hard pairs: same-gender, similar-age siblings or colleagues.</li>
+  <li><b>Accents:</b> the English data is split roughly evenly across US, UK, Indian, Nigerian/Kenyan, Southeast Asian and Latin American English, plus non-native speakers.</li>
+  <li><b>Metadata on every file:</b> domain, device, sample rate, number of speakers, overlap %, mean turn length, <b>dominant-speaker share</b>, SNR estimate, language(s). This drives the filters and lets the analysis go deeper than one number. At most 10% of files may have one speaker above 80% of the speech; the pilot showed why (§6.3, point 3).</li>
+  <li><b>Why ~52 hours:</b> per-recording DER typically varies by roughly 8–10 points. With about 60 recordings per domain, the 95% CI on a domain's mean comes to about ±2 points, and <i>paired</i> differences between systems are tighter still. That is enough to separate systems that are really 1–2 points apart. Less data than this and most rankings would just be noise.</li>
+  <li><b>Consent and privacy:</b> written consent for public benchmarking, no real patient data (actors), and personal details removed from what is said.</li>
+</ul>
+
+<h3>3.2 How the reference is built</h3>
+<ol>
+  <li><b>Close-talk channels where possible.</b> Every meeting and clinic participant also wears a headset or lapel mic. Only the mixed or far-field audio goes to systems; the per-person channels are just for building the reference. This is the AMI / CHiME idea, and it makes "who spoke when" much less ambiguous.</li>
+  <li><b>Verbatim transcript, then forced alignment.</b> Professional transcribers write a verbatim transcript, backchannels included. Forced alignment on the close-talk channel then gives word-level times accurate to about 10–20&nbsp;ms, and segments are built from words with a fixed rule: split on pauses ≥ 0.3&nbsp;s. Machine-made boundaries this precise are what make a zero collar fair (§4.2).</li>
+  <li><b>Human pass on top.</b> A trained annotator reviews it in a waveform/spectrogram tool and fixes speaker labels, alignment failures and missed speech. Where there is only one channel (phone, broadcast, field), annotation is fully manual and follows the same written guidelines.</li>
+  <li><b>Written guidelines</b> that fix the boring-but-critical rules. "Mm-hm", "yeah" and short laughs <i>with</i> voicing count as speech. Coughs, breaths and lip smacks don't. Overlap is always annotated. Speech from a TV in the background is marked as "non-target" and excluded via the UEM, a file that lists which time regions get scored.</li>
+</ol>
+
+<h3>3.3 How we check the reference</h3>
+<ul>
+  <li><b>Double annotation of 15%</b> of files, chosen at random and stratified by domain. We compute DER between the two annotators, at collar 0, and publish it as the <b>human agreement floor</b> per domain. If a system scores near that floor, the board says "at human agreement" rather than claiming one is better.</li>
+  <li><b>Adjudication:</b> a senior annotator resolves every disagreement longer than 0.5&nbsp;s on double-annotated files, and the guidelines are updated when a pattern shows up.</li>
+  <li><b>Automatic checks:</b> segments outside the file, overlapping segments from the same speaker, speaker count different from the metadata, a long silence with no label in a file with high SNR, and boundaries more than 1&nbsp;s away from the forced-alignment boundary.</li>
+  <li><b>Disagreement mining, done blind:</b> if the top systems all <i>agree with each other</i> but disagree with the reference in some region, that region gets re-checked by an annotator who doesn't see any system output. This catches reference errors without letting the systems define the truth.</li>
+  <li><b>Versioned references:</b> every fix bumps the reference version, and the leaderboard re-scores everything, so old and new numbers are never mixed.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="metrics">4. Metrics and scoring settings</h2>
+
+<h3>4.1 Definitions in plain words</h3>
+<p><b>Primary metric: Diarization Error Rate (DER), macro-averaged over domains.</b></p>
+<p>DER is the share of the reference speech time that the system got wrong. First, the system's anonymous labels ("spk0, spk1…") are matched one-to-one to the reference speakers in the way that gives the most overlap (the Hungarian algorithm). Then every bit of time that is wrong counts as one of three error types:</p>
+<div class="formula">DER = (missed speech + false alarm speech + speaker confusion) / total reference speech time</div>
+<ul>
+  <li><b>Missed speech:</b> someone was talking and the system said nobody was. In overlap, each missing extra speaker counts.</li>
+  <li><b>False alarm:</b> the system said someone was talking when they weren't, e.g. noise or music.</li>
+  <li><b>Speaker confusion:</b> speech was detected but given to the wrong person.</li>
+</ul>
+<p>DER is pooled within each domain (summed time, not an average of file scores), and the 7 domain DERs are then averaged with <b>equal weight</b>. Without this, the domain with the most hours would decide the ranking.</p>
+
+<p><b>Supporting metrics</b> (shown, not used for ranking):</p>
+<table class="small">
+<thead><tr><th>Metric</th><th>Plain words</th><th>Why it's on the board</th></tr></thead>
+<tbody>
+<tr><td>Error breakdown (Miss / FA / Confusion)</td><td>The three DER parts on their own</td><td>Shows whether a system is bad at finding speech or at telling people apart, which are two different fixes</td></tr>
+<tr><td>JER (Jaccard Error Rate)</td><td>Error computed per speaker and then averaged, so every speaker counts equally</td><td>DER is dominated by whoever talks most. JER shows if a quiet participant, like the patient, is lost</td></tr>
+<tr><td>Speaker-count error</td><td>Mean |predicted − true number of speakers|, and % of files exactly right</td><td>Users see "Speaker 7" in a 4-person meeting as a broken product, even when DER looks fine</td></tr>
+<tr><td>Overlap DER</td><td>DER computed only in regions where two or more people talk</td><td>The hardest part of the problem, and it is where single-label STT systems lose</td></tr>
+<tr><td>Short-turn recall</td><td>% of reference turns shorter than 1&nbsp;s where most of the turn is given to the right speaker</td><td>Backchannels ("mm-hm", "right") matter for meeting summaries and are easy to drop</td></tr>
+<tr><td>Forgiving DER</td><td>DER with a 0.25&nbsp;s collar per side and overlap skipped</td><td>Only so people can compare with older papers. Clearly labelled as not the ranking metric</td></tr>
+<tr><td>cpWER / tcpWER (MeetEval)</td><td>Word error rate after matching speakers, with time constraints for tcpWER</td><td>For STT systems, the number that reflects "is the transcript attributed correctly"</td></tr>
+<tr><td>Speed, latency, cost</td><td>Real-time factor on fixed GPU; for streaming, algorithmic latency; list price per audio hour</td><td>Most buying decisions are a DER-vs-cost trade-off</td></tr>
+</tbody>
+</table>
+
+<h3>4.2 Scoring settings, and why</h3>
+<table>
+<thead><tr><th>Setting</th><th>My choice</th><th>Reason</th></tr></thead>
+<tbody>
+<tr><td>Collar</td><td><b>0 s</b> (none)</td><td>The reference comes from forced alignment, so its boundaries are accurate to about 20&nbsp;ms. A collar was originally there to forgive fuzzy <i>human</i> boundaries, and it doesn't come for free. In my pilot a 0.25&nbsp;s/side collar quietly removed <b>21.9%</b> of the scored speech, and that was mostly the short turns and turn changes, which are exactly the hard part.</td></tr>
+<tr><td>Overlapping speech</td><td><b>Scored</b></td><td>Overlap is 17% of speech time in my pilot meetings, and a real meeting has it. Skipping it rewards systems for ignoring a problem users actually have. Single-label systems take a penalty here, and the board shows that penalty separately (Overlap DER) so it is understood, not hidden.</td></tr>
+<tr><td>Number of speakers</td><td><b>Not given</b> (Blind track ranks); Hinted track shown alongside</td><td>A call-analytics pipeline might know the count is 2, but a meeting tool usually doesn't. Ranking on the realistic case and showing the hinted case also tells users how much they'd gain from passing a hint. In my pilot, with default settings the hint cut DER by up to 48 points. With a properly tuned threshold the best system was within a point of the hinted score, which is itself useful to know.</td></tr>
+<tr><td>Speech activity</td><td><b>System's own</b> (no oracle VAD)</td><td>Systems are deployed with their own VAD, and missed speech and false alarms are real user-facing errors</td></tr>
+<tr><td>Scored region (UEM)</td><td>Whole file minus annotated non-target regions</td><td>Keeps background TV/radio speech from counting as a false alarm or a miss</td></tr>
+<tr><td>Averaging</td><td>Pooled per domain, then equal-weight across domains</td><td>Matches "how good is it for <i>my</i> type of audio"; no domain dominates</td></tr>
+</tbody>
+</table>
+<p class="note">A detail that's easy to get wrong: <b>pyannote.metrics' <code>collar</code> is the total width, while dscore's <code>--collar</code> is per side.</b> So "dscore 0.25" equals "pyannote collar=0.5". I double-checked this while writing the pilot scorer, because it's an easy way to report a collar twice as big as you meant. The leaderboard will publish the exact command line next to every setting.</p>
+
+<!-- ============================================================ -->
+<h2 id="process">5. Evaluation process: raw audio to a published leaderboard</h2>
+<ol class="steps">
+  <li><b>Collect and consent.</b> Record or license audio, collect consent and metadata, and run privacy review.</li>
+  <li><b>Build the reference</b> following §3.2, then QA it with double annotation, automatic checks and adjudication (§3.3). Freeze it as reference vN with a UEM per file.</li>
+  <li><b>Split.</b> The public dev set (about 8&nbsp;h, plus classic sets like AMI, VoxConverse and DIHARD) is released with references. The hidden test set (52&nbsp;h) never leaves our storage. No speaker appears in both.</li>
+  <li><b>Register systems.</b> For each one, record the exact model/version, config, track(s), hint support and licence, and freeze it.</li>
+  <li><b>Run.</b> A harness sends identical audio to each system, with retries and timeouts. It logs version strings returned by APIs, wall-clock time and cost, and stores raw outputs untouched.</li>
+  <li><b>Normalise.</b> Convert outputs to RTTM with the open converter; word-level outputs get the §2.3 rule. Validate the files: no negative durations, times within file length.</li>
+  <li><b>Score.</b> Run pyannote.metrics as the main scorer and cross-check with dscore. The two must agree to within 0.01 points on every file, or the run is blocked. We compute all metrics per file and per domain.</li>
+  <li><b>Statistics.</b> Paired bootstrap over recordings, stratified by domain, with 10,000 resamples. This gives a 95% CI on every score and on every pairwise difference.</li>
+  <li><b>Sanity review.</b> A human looks at outliers (any file with DER &gt; 60%, any system with failures) and at a sample of the worst errors. A bug in our converter looks exactly like a bad model.</li>
+  <li><b>Vendor preview.</b> Each vendor sees its own per-domain scores for 5 working days to flag pipeline errors on our side. They never see the audio, and they can't veto.</li>
+  <li><b>Publish</b> the leaderboard, the full methodology and the scoring code, plus a changelog.</li>
+  <li><b>Maintain.</b> Re-run all APIs quarterly, rotate about 20% of the test set, and re-score everything when the reference version changes.</li>
+</ol>
+
+<h3>5.1 Deciding that one system really beats another</h3>
+<ul>
+  <li>Bootstrap resampling is done over <b>whole recordings</b>, not minutes, because errors inside a recording are correlated (if the system mixes up two voices once, it keeps mixing them up). The pilot made this concrete; see §6.3, point 6.</li>
+  <li>It is <b>paired</b>: the same resampled recordings are used for both systems, which removes the "this sample just had easy files" noise.</li>
+  <li><b>Tiers, not raw ranks.</b> Sort by DER. Starting from the top system, the next system joins the current tier if the 95% CI of their difference includes 0. Otherwise it starts a new tier. Holm correction applies across these adjacent comparisons. The board shows "Tier 1: A, B, C" before it shows any decimal places.</li>
+  <li><b>Practical threshold.</b> Even a statistically real gap under 0.5 DER points is shown as "tied in practice", because users won't notice it.</li>
+  <li><b>Run-to-run check.</b> Every API is run twice on 10% of the test set. If two runs of the same API differ by more than the gap between two systems, those systems are tied regardless of the bootstrap.</li>
+</ul>
+
+<h3>5.2 What sits next to each score</h3>
+<p>Next to each score: 95% CI · tier · Miss/FA/Confusion · JER · speaker-count error · overlap DER · per-domain DER (on hover) · exact model/version and run date · track and settings (hint yes/no) · real-time factor or latency · list price per hour · licence (open / commercial / non-commercial) · number of failed files · reference version. The leaderboard sketch shows how this fits on one screen without becoming a wall of numbers.</p>
+
+<!-- ============================================================ -->
+<h2 id="pilot">6. Pilot: a small version I actually ran</h2>
+<div id="pilot-body">
+<p>I wanted to know if my scoring choices actually matter on real audio, or if I was arguing about details. So I ran a small version end to end.</p>
+
+<h3>6.1 Exact setup</h3>
+<table class="small">
+<tr><th>Audio</th><td>AMI test meetings <b>IS1009a, TS3003a, EN2002b</b> (4 speakers each). I scored the first 10 min of each, and used both the headset mix (<b>IHM</b>, close-talk) and a single far-field array mic (<b>SDM</b>). That's 1 hour of audio in total. The official AMI mirror returned HTTP 503, so I used the HF copy <code>diarizers-community/ami</code>.</td></tr>
+<tr><th>Reference</th><td>Word-aligned "only_words" RTTMs. I checked they are identical to <code>pyannote/AMI-diarization-setup</code> (DER 0.0 between the two copies).</td></tr>
+<tr><th>Systems</th><td>All three are built with <b>sherpa-onnx 2.0.3</b> on CPU (Apple M-series, 4 threads), with <code>min_duration_on=0.3</code> and <code>min_duration_off=0.5</code>.<br>
+<b>A</b> = pyannote <code>segmentation-3.0</code> + WeSpeaker ResNet34-LM embeddings (the pyannote 3.x recipe)<br>
+<b>B</b> = Rev <code>reverb-diarization-v1</code> segmentation + WeSpeaker ResNet34-LM<br>
+<b>C</b> = pyannote <code>segmentation-3.0</code> + NVIDIA TitaNet-small embeddings</td></tr>
+<tr><th>Modes</th><td>(1) blind with the default clustering threshold 0.5; (2) blind with a threshold tuned on a <b>held-out</b> meeting, ES2004c, not in the test files (A/B 0.8, C 0.9); (3) speaker count given (k = 4)</td></tr>
+<tr><th>Scoring</th><td>pyannote.metrics 4.2.0, three settings: strict (my choice), 0.25&nbsp;s/side collar, collar + skip overlap. 54 scored runs. Code: <a href="https://github.com/coolstack-coder/diarization-eval-mini">github.com/coolstack-coder/diarization-eval-mini</a></td></tr>
+</table>
+
+<h3>6.2 Results (strict DER %, pooled over the 3 meetings)</h3>
+<table class="small">
+<thead><tr><th>System</th><th class="num">IHM blind default</th><th class="num">IHM blind tuned</th><th class="num">IHM k=4</th><th class="num">SDM blind default</th><th class="num">SDM blind tuned</th><th class="num">SDM k=4</th><th class="num">Speed (RTF, CPU)</th></tr></thead>
+<tbody>
+<tr><td>A · pyannote-seg + WeSpeaker</td><td class="num">58.3</td><td class="num">42.4</td><td class="num">30.5</td><td class="num">60.5</td><td class="num">41.4</td><td class="num">54.5</td><td class="num">0.12</td></tr>
+<tr><td>B · Reverb-v1 + WeSpeaker</td><td class="num">74.6</td><td class="num">58.8</td><td class="num">56.0</td><td class="num">81.3</td><td class="num">66.4</td><td class="num">79.4</td><td class="num">0.16</td></tr>
+<tr><td>C · pyannote-seg + TitaNet</td><td class="num">61.3</td><td class="num"><b>25.9</b></td><td class="num"><b>27.8</b></td><td class="num">82.9</td><td class="num"><b>34.5</b></td><td class="num"><b>34.9</b></td><td class="num">0.06</td></tr>
+</tbody>
+</table>
+<figure><img src="fig_breakdown.png" alt="Error breakdown per system and mode"><figcaption>Fig 1. Strict DER split into missed speech, false alarm and speaker confusion. Almost all the movement between modes is speaker confusion, i.e. clustering.</figcaption></figure>
+
+<p class="note">These absolute numbers are much worse than published ones. For example, pyannote's own card reports 18.8 for 3.1 on the full AMI-IHM test. The sherpa-onnx port uses a simpler clustering step than real pyannote, and I scored only 10-minute crops. <b>This is a test of the method, not a ranking of these models.</b> I'd be uncomfortable if anyone read it as one.</p>
+
+<h3>6.3 What I saw</h3>
+<ol>
+<li><b>Speaker counting was the biggest source of error, and default settings hide how good a model is.</b> With the default threshold, C guessed <b>30–59 speakers</b> for 4-person meetings, and its confusion error was 64% on SDM. After tuning the threshold on one held-out meeting, C went from 61.3 → 25.9 (IHM) and 82.9 → 34.5 (SDM), which is basically as good as being told k=4. <b>The ranking flipped:</b> on defaults A beat C on IHM (58.3 vs 61.3), but after tuning C beat A by 16 points. A board that ran everything at defaults would be ranking whoever picked a good default, not the better model. <i>This changed my design:</i> open-source systems on the board get their free parameters tuned by us on the public dev set, using the same procedure for every system, and the config is published (§2.3, rule 2).</li>
+<li><b>Mic condition changes the gap between systems.</b> With k=4, A and C are close on close-talk audio (30.5 vs 27.8; the 1-minute-chunk CI of the difference is [−0.0, +2.6], so I'd call it a tie). On the far-field mic, A falls to 54.5 while C stays at 34.9. WeSpeaker embeddings seem to break on distant, reverberant audio here. On a meetings-only, close-mic test set you would never see this, which is why far-field and phone audio are their own domains.</li>
+<li><b>DER can be gamed by putting everyone into one speaker.</b> In the first 10 min of TS3003a one person talks <b>96.6%</b> of the time. Tuned A put <i>all</i> speech into one speaker and got <b>15.0% DER, its best file</b>, while its JER was 78%. A system that "hears" one person in a 4-person meeting is useless for meeting notes. <i>This changed my design too:</i> JER and speaker-count error sit right next to DER on the board, and test-set curation now records each file's dominant-speaker share and caps how many files can be over 80%.</li>
+<li><b>Scoring settings change the number a lot.</b> On these meetings a 0.25&nbsp;s collar removes <b>21.9%</b> of the scored speech time, and collar + skip-overlap removes <b>40.6%</b>. The same output from C (k=4, IHM) scores 27.8 strict, 21.8 with a collar, and 16.1 with collar + skip-overlap, so it looks 1.7× better with no change to the model. Overlap is <b>17.3%</b> of speech time here, and 37% in EN2002b. Also, the forgiving setting doesn't help everyone equally: B on SDM gets <i>worse</i> (79.4 → 83.3) because dropping overlap shrinks the denominator more than it removes B's errors, and those are mostly false alarms outside overlap. So the settings can reorder systems, not just shift them.</li>
+<li><b>A result I can't fully explain yet:</b> B has about 22% false alarm in every mode, which is far above A and C with the same embeddings. It could be the Reverb model, or it could be how sherpa-onnx wraps it or my <code>min_duration</code> settings. I didn't have time to rule out my own setup. That is the exact case for the "sanity review" and "vendor preview" steps in §5: a harness problem looks identical to a bad model.</li>
+<li><b>Statistics with 3 files are weak, and the pilot made that concrete.</b> The bootstrap over 1-minute chunks treats minutes as independent, which they aren't: if a system confuses two voices once, it keeps doing it. The bootstrap over whole recordings is correct, but with only 3 recordings it has just 10 distinct resamples, so its CI is not trustworthy either. That is why the real test set aims for ~60 recordings per domain (§3.1), and why I only claim the large gaps here (A vs B, A vs C on SDM).</li>
+</ol>
+<figure><img src="fig_settings.png" alt="Same outputs under three scoring settings"><figcaption>Fig 2. The same system outputs scored three ways. Published numbers without their settings are not comparable.</figcaption></figure>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="risks">7. What could make this misleading, and what guards against it</h2>
+<table>
+<thead><tr><th>Risk</th><th>Guard</th></tr></thead>
+<tbody>
+<tr><td>Test audio leaks into training data</td><td>Hidden, newly recorded test set; zero-retention API settings; quarterly rotation of about 20%; public classic sets kept in a separate tab</td></tr>
+<tr><td>One headline number hides domain failure</td><td>Domain filter is the first control on the page; macro-average; the worst domain is shown next to the overall score</td></tr>
+<tr><td>Tiny gaps shown as ranks</td><td>Bootstrap tiers plus a 0.5-point practical threshold (§5.1)</td></tr>
+<tr><td>Generous settings make everyone look good</td><td>Strict default; forgiving numbers are labelled "for literature comparison only"</td></tr>
+<tr><td>Reference errors punish the best systems</td><td>Double annotation, published human-agreement floor, blind disagreement mining</td></tr>
+<tr><td>API silently changes under the same name</td><td>Version strings and run date logged and shown; quarterly re-runs; history chart per system</td></tr>
+<tr><td>Our converter or harness has a bug that looks like a bad model</td><td>Two scorers must agree; outlier review; vendor preview; converter is open source</td></tr>
+<tr><td>Cherry-picked configs</td><td>One frozen config per system, tuned on dev only, published</td></tr>
+<tr><td>Dropped failures</td><td>Failures scored as 100% miss and counted publicly</td></tr>
+</tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="reflection">8. Final reflection</h2>
+<div id="reflection-body">
+<p><b>Which design choice am I least sure about, and why?</b><br>
+Collar 0 on domains where the reference is <i>manual</i> (phone, broadcast, field). For meetings and clinics I have close-talk channels and forced alignment, so the reference boundaries are tight and zero collar is fair. For single-channel audio, human boundaries can be off by 100–200&nbsp;ms, and strict scoring then partly measures annotator noise. My guard is to publish the human agreement floor per domain and show the forgiving DER next to it. If the double-annotation numbers show that boundary noise is a big share of the error in those domains, I'd switch to a small collar (about 0.1&nbsp;s) <i>only there</i> and say so.</p>
+
+<p><b>Which benchmark influenced me most, and how?</b><br>
+DIHARD III. It is the one that took "real use" seriously: many domains instead of one corpus, no collar, overlap scored, JER alongside DER, and a clear dev/eval split. My domain-balanced macro-average and strict settings come straight from that thinking. A close second is the pyannote benchmark table, which taught me something different: it states its settings (no collar, overlap scored) right next to the numbers. Other tables, like the arXiv benchmarking paper with a 0.25&nbsp;s collar, use different settings, so numbers across tables aren't comparable. My pilot (Fig 2) showed why that matters.</p>
+
+<p><b>What could make my leaderboard misleading, and how did I guard against it?</b><br>
+The main ones are in §7. From the pilot, the three I now worry about most are: (1) ranking defaults instead of models, guarded by tuning every open system on dev with the same procedure; (2) DER rewarding "everyone is one speaker" on audio dominated by one speaker, guarded by JER and speaker-count error next to DER plus a cap on dominant-speaker files; and (3) people reading 0.5-point gaps as real, guarded by tiers from a recording-level paired bootstrap and a practical threshold. More generally: leaked test data (hidden set plus rotation), APIs changing behind the same name (version and date on every row), and dropped failures (counted as 100% miss).</p>
+
+<p><b>What would I improve with more time?</b></p>
+<ul>
+<li>Run the commercial APIs from §2.2 on the same pilot clips. I avoided creating paid accounts for this, but it's the most interesting comparison, especially to see the overlap penalty for single-label STT systems.</li>
+<li>Run the real pyannote community-1 and Nemotron-3-Diarization instead of ONNX re-implementations, on the full AMI test set instead of 10-min crops, and choose crops that aren't dominated by one speaker.</li>
+<li>Cross-check every score with dscore. I couldn't set it up in my environment this time, so the pilot uses pyannote.metrics only.</li>
+<li>Annotate 20 minutes myself, twice, a week apart, to get a first estimate of the human agreement floor and of how many errors the guidelines in §3.2 actually prevent.</li>
+<li>Measure how much the word-to-segment converter (§2.3, rule 4) changes DER, and try the streaming track at a 1&nbsp;s latency.</li>
+<li>Find out what's behind B's ~22% false alarm before trusting that number.</li>
+</ul>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="sources">9. Sources I read or used</h2>
+<ul class="small refs">
+  <li>Ryant et al., <i>The Third DIHARD Diarization Challenge</i>, arXiv:2012.01477. Domain-balanced test set, collar 0, overlap scored, and JER as a second metric.</li>
+  <li>Park et al., <i>A Review of Speaker Diarization: Recent Advances with Deep Learning</i>, arXiv:2101.09624.</li>
+  <li>AMI Meeting Corpus and the pyannote <code>AMI-diarization-setup</code> (word-aligned "only_words" references).</li>
+  <li>VoxConverse (Chung et al.), CALLHOME, AliMeeting, CHiME-8 Task 1 (DASR) task pages.</li>
+  <li>pyannote.metrics docs; dscore README (DER/JER definitions and collar semantics); MeetEval (cpWER/tcpWER).</li>
+  <li>Model cards and docs: pyannote community-1, NVIDIA Nemotron-3-Diarization and streaming Sortformer v2.1, DiariZen README, 3D-Speaker; API docs for pyannoteAI, AssemblyAI, Deepgram, Speechmatics, AWS Transcribe, Google Chirp 3, Azure AI Speech, ElevenLabs, Rev.ai, Gladia, OpenAI (all checked 23 Nov 2026).</li>
+  <li>“Benchmarking Diarization Models”, arXiv:2509.26177 (uses a 0.25&nbsp;s collar, which is a good example of why settings must be stated next to numbers).</li>
+  <li>sherpa-onnx (k2-fsa) offline speaker diarization, used for the pilot.</li>
+</ul>
+
+<p class="footer">Pilot code, raw outputs and scores: <a href="https://github.com/coolstack-coder/diarization-eval-mini">github.com/coolstack-coder/diarization-eval-mini</a> (scripts, RTTM outputs, scores, figures)</p>
+</body>
+</html>
