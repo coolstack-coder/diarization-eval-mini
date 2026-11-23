@@ -1,0 +1,116 @@
+1
+00:00:00,800 --> 00:00:05,210
+Hi, I'm Anmol Adwani. This is my walkthrough for the Voice Arena take-home.
+
+2
+00:00:05,510 --> 00:00:09,053
+I designed a public leaderboard for speaker diarization,
+
+3
+00:00:09,053 --> 00:00:12,660
+who spoke when, and tested my own choices on real audio.
+
+4
+00:00:13,310 --> 00:00:15,760
+The board is for teams picking a system:
+
+5
+00:00:15,760 --> 00:00:18,700
+meeting notes, call analytics, medical scribes.
+
+6
+00:00:19,000 --> 00:00:21,593
+Their question isn't who's number one.
+
+7
+00:00:21,593 --> 00:00:25,550
+It's which system works on my audio, and is the gap real?
+
+8
+00:00:25,850 --> 00:00:30,350
+So the hidden test set covers seven domains, and each one counts equally.
+
+9
+00:00:31,000 --> 00:00:33,759
+To test my choices, I ran a small version:
+
+10
+00:00:33,759 --> 00:00:39,540
+three open pipelines on three AMI meetings, close and far mics, fifty-four scored runs.
+
+11
+00:00:39,840 --> 00:00:44,250
+Choice one is strict scoring: no collar, and overlapping speech counts.
+
+12
+00:00:44,550 --> 00:00:46,843
+The lenient settings many papers use dropped
+
+13
+00:00:46,843 --> 00:00:49,240
+forty-one percent of the speech from scoring.
+
+14
+00:00:49,890 --> 00:00:52,952
+Choice two: systems aren't told the speaker count,
+
+15
+00:00:52,952 --> 00:00:56,810
+and every open model gets the same tuning on a public dev set.
+
+16
+00:00:57,110 --> 00:01:01,660
+On defaults, one model guessed fifty-nine speakers in a four-person meeting.
+
+17
+00:01:01,960 --> 00:01:06,101
+After tuning, its error fell from sixty-one to twenty-six percent,
+
+18
+00:01:06,101 --> 00:01:07,670
+and the ranking flipped.
+
+19
+00:01:08,320 --> 00:01:11,990
+Choice three: DER is never shown alone.
+
+20
+00:01:12,290 --> 00:01:16,530
+In one clip, one person spoke ninety-seven percent of the time.
+
+21
+00:01:16,530 --> 00:01:22,790
+Merging everyone into one speaker scored fifteen percent DER, but seventy-eight percent JER.
+
+22
+00:01:23,090 --> 00:01:24,690
+So JER sits beside it,
+
+23
+00:01:24,690 --> 00:01:29,270
+and close systems share a tier, decided by a paired bootstrap.
+
+24
+00:01:29,920 --> 00:01:32,990
+As a product, domain is the first filter.
+
+25
+00:01:33,290 --> 00:01:37,610
+Every score shows its confidence interval and error breakdown,
+
+26
+00:01:37,610 --> 00:01:41,790
+and APIs that can't output overlap are flagged, not hidden.
+
+27
+00:01:42,440 --> 00:01:44,810
+DIHARD Three shaped my thinking most.
+
+28
+00:01:45,110 --> 00:01:49,870
+My lesson: a diarization score means nothing without its settings and domain.
+
+29
+00:01:49,870 --> 00:01:52,590
+The code is on GitHub. Thanks for watching!
+
