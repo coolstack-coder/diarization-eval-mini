@@ -1,0 +1,1622 @@
+[
+ {
+  "system": "A_pyannoteSeg_wespeaker",
+  "mode": "auto",
+  "meeting": "EN2002b",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.7808707530956679,
+   "miss": 0.17211768680503503,
+   "fa": 0.03645176926805644,
+   "conf": 0.5723012970225764,
+   "total": 680.7899999999996
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.7302419850141258,
+   "miss": 0.14857920812349037,
+   "fa": 0.020861483028292924,
+   "conf": 0.5608012938623426,
+   "total": 488.4599999999994
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.5891972378075097,
+   "miss": 0.01965472593871393,
+   "fa": 0.04075960293482964,
+   "conf": 0.528782908933966,
+   "total": 231.69999999999993
+  },
+  "jer": 0.7631278595396939,
+  "spk_ref": 4,
+  "spk_hyp": 40
+ },
+ {
+  "system": "A_pyannoteSeg_wespeaker",
+  "mode": "auto",
+  "meeting": "EN2002b",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.6934825717181508,
+   "miss": 0.19282451269848236,
+   "fa": 0.04733030743694795,
+   "conf": 0.45332775158272043,
+   "total": 680.7899999999994
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.6493448798263938,
+   "miss": 0.16673013143348508,
+   "fa": 0.03385128772059161,
+   "conf": 0.4487634606723171,
+   "total": 488.45999999999975
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.6567975830815715,
+   "miss": 0.04234354769098007,
+   "fa": 0.06739318083728979,
+   "conf": 0.5470608545533018,
+   "total": 231.6999999999999
+  },
+  "jer": 0.701592596835347,
+  "spk_ref": 4,
+  "spk_hyp": 13
+ },
+ {
+  "system": "A_pyannoteSeg_wespeaker",
+  "mode": "auto",
+  "meeting": "IS1009a",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.4570992588286597,
+   "miss": 0.07723752776797439,
+   "fa": 0.07459671559366428,
+   "conf": 0.30526501546702106,
+   "total": 481.67000000000013
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.3895227662144321,
+   "miss": 0.051498553411420366,
+   "fa": 0.04047920002247124,
+   "conf": 0.2975450127805405,
+   "total": 356.00999999999993
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.3766393175750471,
+   "miss": 0.02022204857719539,
+   "fa": 0.04607019600182338,
+   "conf": 0.3103470729960283,
+   "total": 307.13999999999965
+  },
+  "jer": 0.46695325793882914,
+  "spk_ref": 4,
+  "spk_hyp": 6
+ },
+ {
+  "system": "A_pyannoteSeg_wespeaker",
+  "mode": "auto",
+  "meeting": "IS1009a",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.5582888699732178,
+   "miss": 0.07489567546245404,
+   "fa": 0.0850852243237067,
+   "conf": 0.39830797018705705,
+   "total": 481.6700000000002
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.5309345243111147,
+   "miss": 0.050018257914103775,
+   "fa": 0.04930198589927239,
+   "conf": 0.4316142804977386,
+   "total": 356.01000000000005
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.5523474636973366,
+   "miss": 0.01868203425148133,
+   "fa": 0.057146578107703266,
+   "conf": 0.476518851338152,
+   "total": 307.13999999999976
+  },
+  "jer": 0.6433928044670624,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "A_pyannoteSeg_wespeaker",
+  "mode": "auto",
+  "meeting": "TS3003a",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.4361392836996099,
+   "miss": 0.08143094395594437,
+   "fa": 0.024722186061373826,
+   "conf": 0.32998615368229167,
+   "total": 506.9939999999996
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.3981691866880069,
+   "miss": 0.06682599423455196,
+   "fa": 0.015595494053564057,
+   "conf": 0.31574769839989086,
+   "total": 458.59399999999965
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.3928613978034389,
+   "miss": 0.06326254153300391,
+   "fa": 0.015779231953827563,
+   "conf": 0.3138196243166075,
+   "total": 453.2539999999995
+  },
+  "jer": 0.728894577272032,
+  "spk_ref": 4,
+  "spk_hyp": 14
+ },
+ {
+  "system": "A_pyannoteSeg_wespeaker",
+  "mode": "auto",
+  "meeting": "TS3003a",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.5305427677645101,
+   "miss": 0.11659112336635152,
+   "fa": 0.025256709152376246,
+   "conf": 0.3886949352457823,
+   "total": 506.99399999999974
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.5141214233068915,
+   "miss": 0.10133364152169481,
+   "fa": 0.013066023541520868,
+   "conf": 0.39972175824367584,
+   "total": 458.59399999999977
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.5143297135822311,
+   "miss": 0.09788330604914706,
+   "fa": 0.013219960551920604,
+   "conf": 0.40322644698116344,
+   "total": 453.2539999999997
+  },
+  "jer": 0.8508288217445024,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "A_pyannoteSeg_wespeaker",
+  "mode": "autoTuned",
+  "meeting": "EN2002b",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.5061076102762962,
+   "miss": 0.1701258831651463,
+   "fa": 0.03746823543236533,
+   "conf": 0.2985134916787847,
+   "total": 680.7900000000001
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.44875731892068965,
+   "miss": 0.14665888711460556,
+   "fa": 0.02146542193833675,
+   "conf": 0.28063300986774736,
+   "total": 488.4599999999998
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.2713595166163148,
+   "miss": 0.019659041864480302,
+   "fa": 0.04170047475183434,
+   "conf": 0.21000000000000013,
+   "total": 231.69999999999996
+  },
+  "jer": 0.525508120385827,
+  "spk_ref": 4,
+  "spk_hyp": 8
+ },
+ {
+  "system": "A_pyannoteSeg_wespeaker",
+  "mode": "autoTuned",
+  "meeting": "EN2002b",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.5474713200840203,
+   "miss": 0.19421848147005677,
+   "fa": 0.04538110136752855,
+   "conf": 0.30787173724643496,
+   "total": 680.7899999999994
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.5035949719526673,
+   "miss": 0.1671784793022967,
+   "fa": 0.031967817221471545,
+   "conf": 0.3044486754288991,
+   "total": 488.4599999999997
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.525567544238239,
+   "miss": 0.04205006473888632,
+   "fa": 0.06722054380664641,
+   "conf": 0.4162969356927063,
+   "total": 231.69999999999982
+  },
+  "jer": 0.6347417753703479,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "A_pyannoteSeg_wespeaker",
+  "mode": "autoTuned",
+  "meeting": "IS1009a",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.5014615815807502,
+   "miss": 0.1498287209085063,
+   "fa": 0.04681005667780836,
+   "conf": 0.30482280399443556,
+   "total": 481.67000000000024
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.4584927389680059,
+   "miss": 0.0905367826746441,
+   "fa": 0.025294233308052957,
+   "conf": 0.3426617229853089,
+   "total": 356.01000000000005
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.4390766425734187,
+   "miss": 0.019942045972520504,
+   "fa": 0.02931887738490572,
+   "conf": 0.3898157192159925,
+   "total": 307.13999999999976
+  },
+  "jer": 0.849413310524638,
+  "spk_ref": 4,
+  "spk_hyp": 1
+ },
+ {
+  "system": "A_pyannoteSeg_wespeaker",
+  "mode": "autoTuned",
+  "meeting": "IS1009a",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.5042705586812545,
+   "miss": 0.14907716901613174,
+   "fa": 0.052407249776817946,
+   "conf": 0.30278613988830483,
+   "total": 481.67000000000024
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.45998427010477205,
+   "miss": 0.08944692564815622,
+   "fa": 0.030437347265526292,
+   "conf": 0.3400999971910895,
+   "total": 356.01000000000005
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.4408054958650776,
+   "miss": 0.018675522563000476,
+   "fa": 0.035280328189099514,
+   "conf": 0.3868496451129776,
+   "total": 307.13999999999976
+  },
+  "jer": 0.8492363055782697,
+  "spk_ref": 4,
+  "spk_hyp": 1
+ },
+ {
+  "system": "A_pyannoteSeg_wespeaker",
+  "mode": "autoTuned",
+  "meeting": "TS3003a",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.23856298102147214,
+   "miss": 0.07898910046272765,
+   "fa": 0.02264326599525881,
+   "conf": 0.13693061456348568,
+   "total": 506.9939999999996
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.20188009437541737,
+   "miss": 0.06510551817075691,
+   "fa": 0.014245716254465073,
+   "conf": 0.1225288599501954,
+   "total": 458.59399999999965
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.1939993910699081,
+   "miss": 0.061521795726017015,
+   "fa": 0.014413551783327134,
+   "conf": 0.11806404356056396,
+   "total": 453.25399999999956
+  },
+  "jer": 0.7030595738528894,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "A_pyannoteSeg_wespeaker",
+  "mode": "autoTuned",
+  "meeting": "TS3003a",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.15020098857185715,
+   "miss": 0.12077263241774071,
+   "fa": 0.019686623510337564,
+   "conf": 0.009741732643778868,
+   "total": 506.9939999999998
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.11595441719691138,
+   "miss": 0.10161057493120296,
+   "fa": 0.008783368295268313,
+   "conf": 0.005560473970440111,
+   "total": 458.5939999999999
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.11131727464070995,
+   "miss": 0.09680444077713612,
+   "fa": 0.00888684931627802,
+   "conf": 0.005625984547295805,
+   "total": 453.2539999999998
+  },
+  "jer": 0.7816362519566467,
+  "spk_ref": 4,
+  "spk_hyp": 1
+ },
+ {
+  "system": "A_pyannoteSeg_wespeaker",
+  "mode": "oracleK",
+  "meeting": "EN2002b",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.33982285286211544,
+   "miss": 0.17057682985942765,
+   "fa": 0.03491972561289081,
+   "conf": 0.13432629738979698,
+   "total": 680.7899999999996
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.28423002907095796,
+   "miss": 0.1469639274454409,
+   "fa": 0.019962740040125975,
+   "conf": 0.1173033615853911,
+   "total": 488.45999999999975
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.1428485110056112,
+   "miss": 0.019654725938714084,
+   "fa": 0.04164005179110898,
+   "conf": 0.08155373327578815,
+   "total": 231.69999999999993
+  },
+  "jer": 0.41036144341488434,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "A_pyannoteSeg_wespeaker",
+  "mode": "oracleK",
+  "meeting": "EN2002b",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.5474713200840203,
+   "miss": 0.19421848147005677,
+   "fa": 0.04538110136752855,
+   "conf": 0.30787173724643496,
+   "total": 680.7899999999994
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.5035949719526673,
+   "miss": 0.1671784793022967,
+   "fa": 0.031967817221471545,
+   "conf": 0.3044486754288991,
+   "total": 488.4599999999997
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.525567544238239,
+   "miss": 0.04205006473888632,
+   "fa": 0.06722054380664641,
+   "conf": 0.4162969356927063,
+   "total": 231.69999999999982
+  },
+  "jer": 0.6347417753703479,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "A_pyannoteSeg_wespeaker",
+  "mode": "oracleK",
+  "meeting": "IS1009a",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.3257167770465257,
+   "miss": 0.07902505865011351,
+   "fa": 0.07403616583968295,
+   "conf": 0.1726555525567292,
+   "total": 481.6699999999998
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.250453638942726,
+   "miss": 0.05130192972107445,
+   "fa": 0.041344344259992956,
+   "conf": 0.1578073649616586,
+   "total": 356.00999999999993
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.22392068763430312,
+   "miss": 0.020319723904407647,
+   "fa": 0.04779904929348211,
+   "conf": 0.15580191443641334,
+   "total": 307.13999999999965
+  },
+  "jer": 0.5042621500720978,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "A_pyannoteSeg_wespeaker",
+  "mode": "oracleK",
+  "meeting": "IS1009a",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.5582888699732178,
+   "miss": 0.07489567546245404,
+   "fa": 0.0850852243237067,
+   "conf": 0.39830797018705705,
+   "total": 481.6700000000002
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.5309345243111147,
+   "miss": 0.050018257914103775,
+   "fa": 0.04930198589927239,
+   "conf": 0.4316142804977386,
+   "total": 356.01000000000005
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.5523474636973366,
+   "miss": 0.01868203425148133,
+   "fa": 0.057146578107703266,
+   "conf": 0.476518851338152,
+   "total": 307.13999999999976
+  },
+  "jer": 0.6433928044670624,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "A_pyannoteSeg_wespeaker",
+  "mode": "oracleK",
+  "meeting": "TS3003a",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.23856298102147214,
+   "miss": 0.07898910046272765,
+   "fa": 0.02264326599525881,
+   "conf": 0.13693061456348568,
+   "total": 506.9939999999996
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.20188009437541737,
+   "miss": 0.06510551817075691,
+   "fa": 0.014245716254465073,
+   "conf": 0.1225288599501954,
+   "total": 458.59399999999965
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.1939993910699081,
+   "miss": 0.061521795726017015,
+   "fa": 0.014413551783327134,
+   "conf": 0.11806404356056396,
+   "total": 453.25399999999956
+  },
+  "jer": 0.7030595738528894,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "A_pyannoteSeg_wespeaker",
+  "mode": "oracleK",
+  "meeting": "TS3003a",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.5305427677645101,
+   "miss": 0.11659112336635152,
+   "fa": 0.025256709152376246,
+   "conf": 0.3886949352457823,
+   "total": 506.99399999999974
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.5141214233068915,
+   "miss": 0.10133364152169481,
+   "fa": 0.013066023541520868,
+   "conf": 0.39972175824367584,
+   "total": 458.59399999999977
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.5143297135822311,
+   "miss": 0.09788330604914706,
+   "fa": 0.013219960551920604,
+   "conf": 0.40322644698116344,
+   "total": 453.2539999999997
+  },
+  "jer": 0.8508288217445024,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "B_reverb_wespeaker",
+  "mode": "auto",
+  "meeting": "EN2002b",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.9173900909237793,
+   "miss": 0.3427473964071147,
+   "fa": 0.1510965202191572,
+   "conf": 0.4235461742975074,
+   "total": 680.7899999999992
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.9104327887646886,
+   "miss": 0.3116631863407432,
+   "fa": 0.1837264054374974,
+   "conf": 0.415043196986448,
+   "total": 488.45999999999935
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.9009581355200684,
+   "miss": 0.027436340094950162,
+   "fa": 0.387324126025032,
+   "conf": 0.4861976694000864,
+   "total": 231.69999999999987
+  },
+  "jer": 0.7903907338526575,
+  "spk_ref": 4,
+  "spk_hyp": 37
+ },
+ {
+  "system": "B_reverb_wespeaker",
+  "mode": "auto",
+  "meeting": "EN2002b",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.8563360213869186,
+   "miss": 0.3551947002746808,
+   "fa": 0.17362182170713455,
+   "conf": 0.32751949940510316,
+   "total": 680.7899999999998
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.8653318593129429,
+   "miss": 0.31586209720345604,
+   "fa": 0.2084592392416983,
+   "conf": 0.3410105228677885,
+   "total": 488.45999999999975
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.973003884333191,
+   "miss": 0.03193785066896897,
+   "fa": 0.4394648252050063,
+   "conf": 0.5016012084592157,
+   "total": 231.69999999999987
+  },
+  "jer": 0.754555515163913,
+  "spk_ref": 4,
+  "spk_hyp": 11
+ },
+ {
+  "system": "B_reverb_wespeaker",
+  "mode": "auto",
+  "meeting": "IS1009a",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.7866236219818549,
+   "miss": 0.13984055473664625,
+   "fa": 0.3453380945460585,
+   "conf": 0.3014449726991502,
+   "total": 481.66999999999996
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.7949242998792175,
+   "miss": 0.08261846577343324,
+   "fa": 0.4085418948905927,
+   "conf": 0.30376393921519157,
+   "total": 356.01000000000005
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.8227713746174391,
+   "miss": 0.014618740639448197,
+   "fa": 0.4735462655466564,
+   "conf": 0.33460636843133446,
+   "total": 307.13999999999976
+  },
+  "jer": 0.4915835895029281,
+  "spk_ref": 4,
+  "spk_hyp": 7
+ },
+ {
+  "system": "B_reverb_wespeaker",
+  "mode": "auto",
+  "meeting": "IS1009a",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.8487823613677412,
+   "miss": 0.14518861461166394,
+   "fa": 0.35544459899931463,
+   "conf": 0.3481491477567626,
+   "total": 481.6700000000002
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.8788629532878292,
+   "miss": 0.08500323024634213,
+   "fa": 0.4132692901884782,
+   "conf": 0.3805904328530089,
+   "total": 356.00999999999993
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.9236244058084269,
+   "miss": 0.015882008204727852,
+   "fa": 0.47902585140326975,
+   "conf": 0.4287165462004293,
+   "total": 307.13999999999965
+  },
+  "jer": 0.7032898968910474,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "B_reverb_wespeaker",
+  "mode": "auto",
+  "meeting": "TS3003a",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.4788597103713267,
+   "miss": 0.03604579146893301,
+   "fa": 0.20529434273383976,
+   "conf": 0.237519576168554,
+   "total": 506.99399999999974
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.43028037872279284,
+   "miss": 0.013667863077144878,
+   "fa": 0.1890343092146875,
+   "conf": 0.22757820643096047,
+   "total": 458.59399999999977
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.42468902646198475,
+   "miss": 0.007867553292414693,
+   "fa": 0.1912614119235581,
+   "conf": 0.22556006124601197,
+   "total": 453.25399999999973
+  },
+  "jer": 0.7476392110713372,
+  "spk_ref": 4,
+  "spk_hyp": 11
+ },
+ {
+  "system": "B_reverb_wespeaker",
+  "mode": "auto",
+  "meeting": "TS3003a",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.721499662717903,
+   "miss": 0.03739491986098473,
+   "fa": 0.20628054769878998,
+   "conf": 0.4778241951581283,
+   "total": 506.9939999999996
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.698522004212878,
+   "miss": 0.020458183055164263,
+   "fa": 0.18947260539823954,
+   "conf": 0.4885912157594741,
+   "total": 458.5939999999997
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.7004416949436753,
+   "miss": 0.015183539472348791,
+   "fa": 0.19170487188199173,
+   "conf": 0.4935532835893347,
+   "total": 453.2539999999996
+  },
+  "jer": 0.8766484410136333,
+  "spk_ref": 4,
+  "spk_hyp": 3
+ },
+ {
+  "system": "B_reverb_wespeaker",
+  "mode": "autoTuned",
+  "meeting": "EN2002b",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.693857136561935,
+   "miss": 0.3528621160710348,
+   "fa": 0.1499272903538539,
+   "conf": 0.1910677301370464,
+   "total": 680.7899999999996
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.6851758588216018,
+   "miss": 0.3205932932072218,
+   "fa": 0.18213569176595845,
+   "conf": 0.1824468738484216,
+   "total": 488.4599999999996
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.5665904186447995,
+   "miss": 0.025330168321104424,
+   "fa": 0.3839706517047908,
+   "conf": 0.15728959861890446,
+   "total": 231.69999999999993
+  },
+  "jer": 0.5788457131584804,
+  "spk_ref": 4,
+  "spk_hyp": 9
+ },
+ {
+  "system": "B_reverb_wespeaker",
+  "mode": "autoTuned",
+  "meeting": "EN2002b",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.7977423287651111,
+   "miss": 0.3546159608689903,
+   "fa": 0.1702169538330472,
+   "conf": 0.2729094140630737,
+   "total": 680.7899999999994
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.8285489088154607,
+   "miss": 0.3187466732178682,
+   "fa": 0.20582647504401577,
+   "conf": 0.3039757605535767,
+   "total": 488.45999999999975
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.9427319810099265,
+   "miss": 0.029805783340526512,
+   "fa": 0.4339145446698313,
+   "conf": 0.47901165299956866,
+   "total": 231.69999999999996
+  },
+  "jer": 0.7726846886978492,
+  "spk_ref": 4,
+  "spk_hyp": 3
+ },
+ {
+  "system": "B_reverb_wespeaker",
+  "mode": "autoTuned",
+  "meeting": "IS1009a",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.7812340399028381,
+   "miss": 0.14595469927543803,
+   "fa": 0.3399256752548427,
+   "conf": 0.2953536653725575,
+   "total": 481.6700000000002
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.8128732338979238,
+   "miss": 0.08463807196427059,
+   "fa": 0.39798039380916284,
+   "conf": 0.3302547681244905,
+   "total": 356.01
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.8498437194764604,
+   "miss": 0.013160122419742995,
+   "fa": 0.4613042912027095,
+   "conf": 0.3753793058540079,
+   "total": 307.1399999999997
+  },
+  "jer": 0.845432256846389,
+  "spk_ref": 4,
+  "spk_hyp": 2
+ },
+ {
+  "system": "B_reverb_wespeaker",
+  "mode": "autoTuned",
+  "meeting": "IS1009a",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.8955010691967529,
+   "miss": 0.14484605642867576,
+   "fa": 0.3488757863267382,
+   "conf": 0.40177922644133884,
+   "total": 481.6700000000002
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.9515687761579731,
+   "miss": 0.08362405550405928,
+   "fa": 0.4081598831493498,
+   "conf": 0.4597848375045639,
+   "total": 356.01
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 1.0121052288858505,
+   "miss": 0.01282802630722163,
+   "fa": 0.47310347072996084,
+   "conf": 0.5261737318486681,
+   "total": 307.1399999999997
+  },
+  "jer": 0.8565822022147527,
+  "spk_ref": 4,
+  "spk_hyp": 2
+ },
+ {
+  "system": "B_reverb_wespeaker",
+  "mode": "autoTuned",
+  "meeting": "TS3003a",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.2617703562566826,
+   "miss": 0.036075377617881356,
+   "fa": 0.20242843110569433,
+   "conf": 0.023266547533106915,
+   "total": 506.99399999999974
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.21641364692952936,
+   "miss": 0.013462888742548055,
+   "fa": 0.18633475361648957,
+   "conf": 0.01661600457049173,
+   "total": 458.5939999999999
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.21295785586007088,
+   "miss": 0.007660164058122014,
+   "fa": 0.18853005158255734,
+   "conf": 0.016767640219391505,
+   "total": 453.25399999999973
+  },
+  "jer": 0.7207284805018743,
+  "spk_ref": 4,
+  "spk_hyp": 3
+ },
+ {
+  "system": "B_reverb_wespeaker",
+  "mode": "autoTuned",
+  "meeting": "TS3003a",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.26598934109673966,
+   "miss": 0.03935352292137606,
+   "fa": 0.20054872444249913,
+   "conf": 0.026087093732864518,
+   "total": 506.99399999999974
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.22812771209392277,
+   "miss": 0.020787450337335627,
+   "fa": 0.18419124541533544,
+   "conf": 0.02314901634125172,
+   "total": 458.59399999999977
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.2249246559324361,
+   "miss": 0.015141620371800484,
+   "fa": 0.18636128969628585,
+   "conf": 0.023421745864349773,
+   "total": 453.25399999999973
+  },
+  "jer": 0.8014538884056005,
+  "spk_ref": 4,
+  "spk_hyp": 2
+ },
+ {
+  "system": "B_reverb_wespeaker",
+  "mode": "oracleK",
+  "meeting": "EN2002b",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.6173695265794147,
+   "miss": 0.34419277603960086,
+   "fa": 0.14829536274034597,
+   "conf": 0.12488138779946788,
+   "total": 680.7899999999998
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.6100970396757148,
+   "miss": 0.31240224378659376,
+   "fa": 0.17921426524178038,
+   "conf": 0.1184805306473408,
+   "total": 488.45999999999964
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.5212473025463961,
+   "miss": 0.024613724643935683,
+   "fa": 0.3778118256365991,
+   "conf": 0.11882175226586132,
+   "total": 231.69999999999993
+  },
+  "jer": 0.5942490735241452,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "B_reverb_wespeaker",
+  "mode": "oracleK",
+  "meeting": "EN2002b",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.8102953921179806,
+   "miss": 0.3532073032800128,
+   "fa": 0.17032124443661067,
+   "conf": 0.2867668444013571,
+   "total": 680.7899999999996
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.8396593375097239,
+   "miss": 0.3171293452892764,
+   "fa": 0.20582647504401577,
+   "conf": 0.31670351717643175,
+   "total": 488.45999999999975
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.9731506258092357,
+   "miss": 0.029805783340526512,
+   "fa": 0.4339145446698313,
+   "conf": 0.5094302977988777,
+   "total": 231.69999999999996
+  },
+  "jer": 0.7833129373862472,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "B_reverb_wespeaker",
+  "mode": "oracleK",
+  "meeting": "IS1009a",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.6220669753150503,
+   "miss": 0.13928830942346498,
+   "fa": 0.34440384495609033,
+   "conf": 0.138374820935495,
+   "total": 481.66999999999996
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.6233926013314242,
+   "miss": 0.08371674952950776,
+   "fa": 0.4058425325131321,
+   "conf": 0.13383331928878422,
+   "total": 356.0099999999998
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.6331184476134674,
+   "miss": 0.013912222439278943,
+   "fa": 0.47041739923162146,
+   "conf": 0.14878882594256698,
+   "total": 307.13999999999976
+  },
+  "jer": 0.5598659431709817,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "B_reverb_wespeaker",
+  "mode": "oracleK",
+  "meeting": "IS1009a",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.8487823613677412,
+   "miss": 0.14518861461166394,
+   "fa": 0.35544459899931463,
+   "conf": 0.3481491477567626,
+   "total": 481.6700000000002
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.8788629532878292,
+   "miss": 0.08500323024634213,
+   "fa": 0.4132692901884782,
+   "conf": 0.3805904328530089,
+   "total": 356.00999999999993
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.9236244058084269,
+   "miss": 0.015882008204727852,
+   "fa": 0.47902585140326975,
+   "conf": 0.4287165462004293,
+   "total": 307.13999999999965
+  },
+  "jer": 0.7032898968910474,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "B_reverb_wespeaker",
+  "mode": "oracleK",
+  "meeting": "TS3003a",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.4251766293092236,
+   "miss": 0.036578342150005966,
+   "fa": 0.20346197390896223,
+   "conf": 0.18513631325025542,
+   "total": 506.9939999999997
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.37529710375626496,
+   "miss": 0.014018936139592026,
+   "fa": 0.18690606505972707,
+   "conf": 0.1743721025569459,
+   "total": 458.59399999999977
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.37031774678215873,
+   "miss": 0.008333075935347602,
+   "fa": 0.18910809391643643,
+   "conf": 0.17287657693037464,
+   "total": 453.25399999999973
+  },
+  "jer": 0.7461768135247216,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "B_reverb_wespeaker",
+  "mode": "oracleK",
+  "meeting": "TS3003a",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.721499662717903,
+   "miss": 0.03739491986098473,
+   "fa": 0.20628054769878998,
+   "conf": 0.4778241951581283,
+   "total": 506.9939999999996
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.698522004212878,
+   "miss": 0.020458183055164263,
+   "fa": 0.18947260539823954,
+   "conf": 0.4885912157594741,
+   "total": 458.5939999999997
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.7004416949436753,
+   "miss": 0.015183539472348791,
+   "fa": 0.19170487188199173,
+   "conf": 0.4935532835893347,
+   "total": 453.2539999999996
+  },
+  "jer": 0.8766484410136333,
+  "spk_ref": 4,
+  "spk_hyp": 3
+ },
+ {
+  "system": "C_pyannoteSeg_titanet",
+  "mode": "auto",
+  "meeting": "EN2002b",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.7273564535319268,
+   "miss": 0.16987029774232906,
+   "fa": 0.03696000235021107,
+   "conf": 0.5205261534393867,
+   "total": 680.7899999999994
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.6717909347745981,
+   "miss": 0.1460303811980515,
+   "fa": 0.019381320886050046,
+   "conf": 0.5063792326904966,
+   "total": 488.4599999999997
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.5312473025463967,
+   "miss": 0.01987915407855032,
+   "fa": 0.03720328010358219,
+   "conf": 0.47416486836426425,
+   "total": 231.69999999999996
+  },
+  "jer": 0.7137832713605279,
+  "spk_ref": 4,
+  "spk_hyp": 44
+ },
+ {
+  "system": "C_pyannoteSeg_titanet",
+  "mode": "auto",
+  "meeting": "EN2002b",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.9055670617958547,
+   "miss": 0.19448728682853741,
+   "fa": 0.04730092980214157,
+   "conf": 0.6637788451651757,
+   "total": 680.7899999999987
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.8702145518568559,
+   "miss": 0.16736887360275143,
+   "fa": 0.03230766081153029,
+   "conf": 0.6705380174425742,
+   "total": 488.4599999999992
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.7896072507552869,
+   "miss": 0.04235217954251173,
+   "fa": 0.06628830384117437,
+   "conf": 0.6809667673716008,
+   "total": 231.69999999999982
+  },
+  "jer": 0.8619213838281958,
+  "spk_ref": 4,
+  "spk_hyp": 59
+ },
+ {
+  "system": "C_pyannoteSeg_titanet",
+  "mode": "auto",
+  "meeting": "IS1009a",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.7020055224531307,
+   "miss": 0.07764444536716038,
+   "fa": 0.07431436460647266,
+   "conf": 0.5500467124794977,
+   "total": 481.66999999999945
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.634021516249544,
+   "miss": 0.05189180079211229,
+   "fa": 0.041268503693716575,
+   "conf": 0.540861211763715,
+   "total": 356.0099999999999
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.6136875691866908,
+   "miss": 0.0204922836491501,
+   "fa": 0.046861366152243504,
+   "conf": 0.5463339193852971,
+   "total": 307.13999999999965
+  },
+  "jer": 0.630434394816449,
+  "spk_ref": 4,
+  "spk_hyp": 32
+ },
+ {
+  "system": "C_pyannoteSeg_titanet",
+  "mode": "auto",
+  "meeting": "IS1009a",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.8213403367450742,
+   "miss": 0.07689289347478556,
+   "fa": 0.0857827973508829,
+   "conf": 0.6586646459194058,
+   "total": 481.67000000000013
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.7392854133310872,
+   "miss": 0.05133282772955831,
+   "fa": 0.0527681806690825,
+   "conf": 0.6351844049324464,
+   "total": 356.00999999999993
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.7115028977013748,
+   "miss": 0.018955525167675732,
+   "fa": 0.06022660675913287,
+   "conf": 0.6323207657745661,
+   "total": 307.13999999999965
+  },
+  "jer": 0.72129077061674,
+  "spk_ref": 4,
+  "spk_hyp": 44
+ },
+ {
+  "system": "C_pyannoteSeg_titanet",
+  "mode": "auto",
+  "meeting": "TS3003a",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.37393933656019623,
+   "miss": 0.0808096348280258,
+   "fa": 0.024398710832870294,
+   "conf": 0.2687309908993001,
+   "total": 506.99399999999946
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.3405604957762206,
+   "miss": 0.06618708487245818,
+   "fa": 0.017082648268403385,
+   "conf": 0.257290762635359,
+   "total": 458.59399999999954
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.33398271168042665,
+   "miss": 0.062329289978687696,
+   "fa": 0.017283907036673,
+   "conf": 0.2543695146650659,
+   "total": 453.2539999999994
+  },
+  "jer": 0.7318484690500812,
+  "spk_ref": 4,
+  "spk_hyp": 11
+ },
+ {
+  "system": "C_pyannoteSeg_titanet",
+  "mode": "auto",
+  "meeting": "TS3003a",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.7347167816581659,
+   "miss": 0.1153859808991819,
+   "fa": 0.02585040454127713,
+   "conf": 0.5934803962177069,
+   "total": 506.9939999999997
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.7133542959567729,
+   "miss": 0.09974181956152928,
+   "fa": 0.013473791632686812,
+   "conf": 0.6001386847625568,
+   "total": 458.5939999999997
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.7113450736231789,
+   "miss": 0.09750162160731055,
+   "fa": 0.013632532752055969,
+   "conf": 0.6002109192638123,
+   "total": 453.2539999999997
+  },
+  "jer": 0.7481366280057271,
+  "spk_ref": 4,
+  "spk_hyp": 30
+ },
+ {
+  "system": "C_pyannoteSeg_titanet",
+  "mode": "autoTuned",
+  "meeting": "EN2002b",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.33436889496026617,
+   "miss": 0.16999955933547753,
+   "fa": 0.0329293908547423,
+   "conf": 0.13143994477004636,
+   "total": 680.7899999999994
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.27415141465012455,
+   "miss": 0.1458481758997665,
+   "fa": 0.018781476477091177,
+   "conf": 0.10952176227326686,
+   "total": 488.4599999999997
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.10716012084592172,
+   "miss": 0.019719464825205174,
+   "fa": 0.03840742339231755,
+   "conf": 0.049033232628399,
+   "total": 231.69999999999996
+  },
+  "jer": 0.3675941001168235,
+  "spk_ref": 4,
+  "spk_hyp": 6
+ },
+ {
+  "system": "C_pyannoteSeg_titanet",
+  "mode": "autoTuned",
+  "meeting": "EN2002b",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.3779432717871878,
+   "miss": 0.19418029054480793,
+   "fa": 0.04620220626037393,
+   "conf": 0.13756077498200592,
+   "total": 680.7899999999992
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.3240060598616055,
+   "miss": 0.16534619006674023,
+   "fa": 0.032952544732424385,
+   "conf": 0.12570732506244095,
+   "total": 488.45999999999964
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.2045662494605094,
+   "miss": 0.042839879154078726,
+   "fa": 0.06675442382391068,
+   "conf": 0.09497194648251997,
+   "total": 231.6999999999999
+  },
+  "jer": 0.4133963793901392,
+  "spk_ref": 4,
+  "spk_hyp": 7
+ },
+ {
+  "system": "C_pyannoteSeg_titanet",
+  "mode": "autoTuned",
+  "meeting": "IS1009a",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.3081238192123236,
+   "miss": 0.07649220420619948,
+   "fa": 0.07637801814520316,
+   "conf": 0.155253596860921,
+   "total": 481.66999999999996
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.22640375270357568,
+   "miss": 0.050886211061486164,
+   "fa": 0.04143703828544172,
+   "conf": 0.13408050335664778,
+   "total": 356.00999999999993
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.19369668555056307,
+   "miss": 0.019945301816760477,
+   "fa": 0.048030214234551415,
+   "conf": 0.1257211694992512,
+   "total": 307.13999999999965
+  },
+  "jer": 0.47938895765011236,
+  "spk_ref": 4,
+  "spk_hyp": 5
+ },
+ {
+  "system": "C_pyannoteSeg_titanet",
+  "mode": "autoTuned",
+  "meeting": "IS1009a",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.3963605788195233,
+   "miss": 0.07533165860443924,
+   "fa": 0.08513505096850503,
+   "conf": 0.23589386924657896,
+   "total": 481.6700000000002
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.30628634027134116,
+   "miss": 0.05100137636583258,
+   "fa": 0.051287885171764885,
+   "conf": 0.2039970787337437,
+   "total": 356.00999999999993
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.27123136029172396,
+   "miss": 0.018955525167675912,
+   "fa": 0.058074493716220636,
+   "conf": 0.19420134140782738,
+   "total": 307.1399999999997
+  },
+  "jer": 0.5375332946932062,
+  "spk_ref": 4,
+  "spk_hyp": 8
+ },
+ {
+  "system": "C_pyannoteSeg_titanet",
+  "mode": "autoTuned",
+  "meeting": "TS3003a",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.10997368805153601,
+   "miss": 0.08017254642066837,
+   "fa": 0.021302027242926437,
+   "conf": 0.008499114387941193,
+   "total": 506.9939999999998
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.0836426119835856,
+   "miss": 0.06504446198598379,
+   "fa": 0.013840128741327083,
+   "conf": 0.004758021256274727,
+   "total": 458.5939999999999
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.07948302717681578,
+   "miss": 0.06117320531093001,
+   "fa": 0.014003185851642022,
+   "conf": 0.004306636014243745,
+   "total": 453.2539999999998
+  },
+  "jer": 0.6852688734054714,
+  "spk_ref": 4,
+  "spk_hyp": 2
+ },
+ {
+  "system": "C_pyannoteSeg_titanet",
+  "mode": "autoTuned",
+  "meeting": "TS3003a",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.2527012153989992,
+   "miss": 0.1144056931640217,
+   "fa": 0.02596480431721106,
+   "conf": 0.11233071791776643,
+   "total": 506.9939999999997
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.2148043803451426,
+   "miss": 0.10027824175632487,
+   "fa": 0.013401832557775047,
+   "conf": 0.10112430603104268,
+   "total": 458.5939999999999
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.21104502111398976,
+   "miss": 0.09681547211938568,
+   "fa": 0.013559725893208426,
+   "conf": 0.10066982310139563,
+   "total": 453.2539999999998
+  },
+  "jer": 0.7556427511563063,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "C_pyannoteSeg_titanet",
+  "mode": "oracleK",
+  "meeting": "EN2002b",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.31435391236651505,
+   "miss": 0.17233214353912335,
+   "fa": 0.03117407717504661,
+   "conf": 0.1108476916523451,
+   "total": 680.7899999999996
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.25403308356876714,
+   "miss": 0.14603242844859363,
+   "fa": 0.01715800679687177,
+   "conf": 0.09084264832330174,
+   "total": 488.4599999999998
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.10061286145878344,
+   "miss": 0.01972378075097127,
+   "fa": 0.03498489425981875,
+   "conf": 0.04590418644799342,
+   "total": 231.69999999999996
+  },
+  "jer": 0.36737286820964643,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "C_pyannoteSeg_titanet",
+  "mode": "oracleK",
+  "meeting": "EN2002b",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.44593780754711426,
+   "miss": 0.19484128732795705,
+   "fa": 0.04523127543001515,
+   "conf": 0.20586524478914206,
+   "total": 680.7899999999994
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.40153748515743415,
+   "miss": 0.1680444662817837,
+   "fa": 0.03128608279081251,
+   "conf": 0.20220693608483795,
+   "total": 488.4599999999996
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.3251057401812692,
+   "miss": 0.04226586102719022,
+   "fa": 0.06457056538627642,
+   "conf": 0.21826931376780262,
+   "total": 231.69999999999993
+  },
+  "jer": 0.5611765855612496,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "C_pyannoteSeg_titanet",
+  "mode": "oracleK",
+  "meeting": "IS1009a",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.30533975543421876,
+   "miss": 0.07511781925384614,
+   "fa": 0.07692611123798479,
+   "conf": 0.15329582494238783,
+   "total": 481.6699999999999
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.22605263897081526,
+   "miss": 0.050490154770932494,
+   "fa": 0.04119828094716478,
+   "conf": 0.134364203252718,
+   "total": 356.0099999999998
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.19341993879012817,
+   "miss": 0.019945301816760477,
+   "fa": 0.047753467474116504,
+   "conf": 0.1257211694992512,
+   "total": 307.13999999999965
+  },
+  "jer": 0.4790637761932663,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "C_pyannoteSeg_titanet",
+  "mode": "oracleK",
+  "meeting": "IS1009a",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.3141133971391203,
+   "miss": 0.07325554840451029,
+   "fa": 0.08765129653081975,
+   "conf": 0.1532065522037902,
+   "total": 481.6700000000002
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.24303811690682875,
+   "miss": 0.04950422740934254,
+   "fa": 0.053902980253364055,
+   "conf": 0.13963090924412216,
+   "total": 356.01000000000005
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.21788435241258072,
+   "miss": 0.01873412775932798,
+   "fa": 0.06247965097349793,
+   "conf": 0.13667057367975485,
+   "total": 307.13999999999976
+  },
+  "jer": 0.5012491763208294,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "C_pyannoteSeg_titanet",
+  "mode": "oracleK",
+  "meeting": "TS3003a",
+  "cond": "ihm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.20364146321258278,
+   "miss": 0.08180372943269601,
+   "fa": 0.022633403945609257,
+   "conf": 0.09920432983427752,
+   "total": 506.9939999999996
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.1736001779351676,
+   "miss": 0.06677366036188925,
+   "fa": 0.01534908873644258,
+   "conf": 0.09147742883683578,
+   "total": 458.59399999999965
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.16882366178787225,
+   "miss": 0.06292277619171649,
+   "fa": 0.015529923618986596,
+   "conf": 0.09037096197716916,
+   "total": 453.25399999999956
+  },
+  "jer": 0.6954900709598171,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ },
+ {
+  "system": "C_pyannoteSeg_titanet",
+  "mode": "oracleK",
+  "meeting": "TS3003a",
+  "cond": "sdm",
+  "strict (no collar, overlap scored)": {
+   "der": 0.2527012153989992,
+   "miss": 0.1144056931640217,
+   "fa": 0.02596480431721106,
+   "conf": 0.11233071791776643,
+   "total": 506.9939999999997
+  },
+  "forgiving (0.25s/side, overlap scored)": {
+   "der": 0.2148043803451426,
+   "miss": 0.10027824175632487,
+   "fa": 0.013401832557775047,
+   "conf": 0.10112430603104268,
+   "total": 458.5939999999999
+  },
+  "legacy (0.25s/side, overlap skipped)": {
+   "der": 0.21104502111398976,
+   "miss": 0.09681547211938568,
+   "fa": 0.013559725893208426,
+   "conf": 0.10066982310139563,
+   "total": 453.2539999999998
+  },
+  "jer": 0.7556427511563063,
+  "spk_ref": 4,
+  "spk_hyp": 4
+ }
+]
